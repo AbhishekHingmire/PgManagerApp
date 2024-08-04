@@ -269,9 +269,10 @@
             <table class="table align-middle bg-white rounded">
                 <thead class="thead bg-primary text-white" style="position: sticky; top: -1px; z-index: 1;">
                     <tr>
-                        <th>User Name</th>
-                        <th>Mobile</th>
-                        <th class="text-center">Actions</th>
+                        <th class="text-left">User Name</th>
+                        <th class="text-left">Mobile</th>
+                        <th class="text-left">Pending Payment</th>
+                        <th class="text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -282,23 +283,32 @@
                             foreach (var data in Model.Users)
                             {
                                 a++;
-                                <tr class="justify-content-around">
+                                <tr class="justify-content-between">
                                     <td class="text-left">
                                         <div class="d-flex align-items-center justify-content-left">
                                             <img src="@($"https://mdbootstrap.com/img/new/avatars/{a}.jpg")" alt="dp" style="width: 45px; height: 45px" class="rounded-circle" />
                                             <div class="ml-3">
-                                                <p class="fw-bold mb-1">@data.Name</p>
+                                                <p class="m-1">@data.Name</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-left">
                                         <div class="d-flex align-items-center justify-content-left">
-                                            <div class="">
-                                                <p class="fw-bold mb-1">+91 @data.MobileNumber</p>
-                                            </div>
+                                            
+                                                <p class="m-1">+91 @data.MobileNumber</p>
+                                         
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-left">
+                                        <!-- Toggle Switch for Pending Payment -->
+                                        
+                                           
+                                            <div class="text-danger m-1">
+                                                Pending
+                                            </div>
+                                     
+                                    </td>
+                                    <td class="text-left">
                                         <!-- View Button Form -->
                                         <form asp-action="AddOrEdit" method="post" class="d-inline">
                                             <input type="hidden" name="Id" value="@data.Id" />
@@ -329,7 +339,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="2">
+                                <td colspan="4">
                                     <h3 class="text-center">No data found!</h3>
                                 </td>
                             </tr>

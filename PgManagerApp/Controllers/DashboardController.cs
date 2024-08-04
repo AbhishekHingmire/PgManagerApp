@@ -18,7 +18,10 @@ namespace PgManagerApp.Controllers
         public IActionResult Index()
         {
             var data = _context.Users.ToList();
-            TempData["UserCount"] = data.Count();
+            if(data!=null)
+            {
+                TempData["UserCount"] = data.Count();
+            }
             return View();
         }
 
