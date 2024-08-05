@@ -29,7 +29,7 @@
             }
 </style>
 
-<div class="container">
+<div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800 m-1">Transaction Management</h1>
         <a href="#" class="d-sm-inline-block btn btn-sm m-1 btn-primary shadow-sm" data-toggle="modal"
@@ -86,8 +86,8 @@
                                 <td>@trans.RoomNumber</td>
                                 <td>Rs.@trans.ChargeAmount</td>
                                 <td>Rs.@trans.AmountPaid</td>
-                                <td>@trans.StartDate.ToString("dd-mm-yy")</td>
-                                <td>@trans.EndDate.ToString("dd-mm-yy")</td>
+                                <td>@trans.StartDate.ToString("dd-MM-yy")</td>
+                                <td>@trans.EndDate.ToString("dd-MM-yy")</td>
                                 <td class="row">
                                     <!-- View Button Form -->
                                     <form asp-action="AddOrEdit" method="post">

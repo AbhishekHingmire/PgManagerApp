@@ -115,61 +115,57 @@
                                 </button>
                             </div>
                         <div class="modal-body">
-                            <div class="container m-auto mt-4">
-                                <!-- User Profile Card -->
-                                  
-                                        <!-- User Image and Basic Info -->
-                                        <div class="d-flex align-items-center mb-3">
-                                            <img src="" alt="User Image" class="rounded-circle border mr-2" style="width: 70px; height: 70px;">
-                                            <div class="ms-3">
-                                            <h6 class="card-subtitle mb-2 text-muted"><strong>@Model.Name</strong></h6>
-                                             </div>
-                                        </div>
-                                        <!-- User Details Table -->
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless">
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">Name:</th>
-                                                        <td>@Model.Name</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Email:</th>
-                                                        <td>@Model.Email</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Mobile:</th>
-                                                        <td>@Model.MobileNumber</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Address:</th>
-                                                        <td>@Model.Address</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Designation:</th>
-                                                        <td>@Model.Designation</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Identity Type:</th>
-                                                        <td>@Model.IdentityType</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Identity Number:</th>
-                                                        <td>@Model.IdentityNumber</td>
-                                                    </tr>
-                                                <tr>
-                                                    <th scope="row">Created Date:</th>
-                                                    <td>@Model.CreatedDate?.ToString("yyyy-MM-dd")</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Allocated Room:</th>
-                                                    <td>@Model</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                   
-                            </div>
+                                <div class="w-100 mt-5 container-fluid m-auto">
+                                            <div class="d-flex align-items-center mb-4">
+                                                <i class="fas fa-user-circle fa-4x text-primary mr-3"></i>
+                                                <div>
+                                                    <h6 class="card-title mb-1">@Model.Name</h6>
+                                                    <p class="text-muted mb-0">Profile</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- User Details Table -->
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Email:</th>
+                                                            <td>@Model.Email</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Mobile:</th>
+                                                            <td>@Model.MobileNumber</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Address:</th>
+                                                            <td>@Model.Address</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Designation:</th>
+                                                            <td>@Model.Designation</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Identity Type:</th>
+                                                            <td>@Model.IdentityType</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Identity Number:</th>
+                                                            <td>@Model.IdentityNumber</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Created Date:</th>
+                                                            <td>@Model.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row" class="font-weight-bold">Allocated Room:</th>
+                                                            <td>@Model.RoomNumber</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                </div>
+
                         </div>
                     </div>
                 </div>
@@ -312,11 +308,20 @@
                                     <td class="text-left">
                                         <!-- Toggle Switch for Pending Payment -->
                                         
-                                           
+                                        @if(data.PendingAmount != "0")
+                                        {
                                             <div class="text-danger m-1">
-                                                Pending
+                                                Rs. @data.PendingAmount
                                             </div>
-                                     
+                                        }
+                                        else
+                                        {
+                                            <div class="text-success m-1">
+                                                No Pending
+                                            </div>
+                                        }
+
+                                            
                                     </td>
                                     <td class="text-left">
                                         <!-- View Button Form -->

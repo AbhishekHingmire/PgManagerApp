@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PgManagerApp.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PgManagerApp.Controllers
 {
@@ -18,9 +19,22 @@ namespace PgManagerApp.Controllers
             if (TempData["UserData"] != null)
             {
                 users = JsonConvert.DeserializeObject<UserRegistration>(TempData["UserData"].ToString());
+                int RoomId = _context.Transactions.Where(x => x.UserId == users.Id).Select(x => x.RoomId).FirstOrDefault();
+                string RoomNo = _context.Rooms.Where(x => x.Id == RoomId).Select(x => x.RoomNumber).FirstOrDefault();
+                users.RoomNumber = RoomNo;
             }
             users.Users = _context.Users.ToList();
-            var trans = _context.Transactions.Where(e => e.UserId == users.Id).ToList();
+
+            foreach(var data in users.Users)
+            {
+                string paid = _context.Transactions.Where(x => x.UserId == data.Id).Select(x => x.AmountPaid).FirstOrDefault();
+                string charge = _context.Transactions.Where(x => x.UserId == data.Id).Select(x => x.ChargeAmount).FirstOrDefault();
+                
+
+                int pending = Convert.ToInt32(charge) - Convert.ToInt32(paid);
+                data.PendingAmount = Convert.ToString(pending);
+            }
+            
             
             return View(users);
         }
@@ -68,7 +82,7 @@ namespace PgManagerApp.Controllers
                     TempData["Message"] = "User succesfully updated.";
                     return RedirectToAction("Index");
                 }
-                usr = _context.Users.Where(x => x.Id == newUser.Id).FirstOrDefault(); 
+                usr = _context.Users.Where(x => x.Id == newUser.Id).FirstOrDefault();
                 usr.ViewOnly = newUser.ViewOnly;
                 TempData["UserData"] = JsonConvert.SerializeObject(usr);
             }

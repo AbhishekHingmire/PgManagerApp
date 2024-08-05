@@ -17,6 +17,9 @@ namespace PgManagerApp.Models.Room
         [Display(Name = "Capacity*")]
         public string Capacity { get; set; }
 
+        [NotMapped]
+        public string? RemainingSpace { get; set; }
+
         [Display(Name = "Hot Water")]
         public bool HasHotWater { get; set; } = false;
 

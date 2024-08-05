@@ -10,6 +10,8 @@ namespace PgManagerApp.Models
         [Required(ErrorMessage = "Name is required.")]
         public string? Name { get; set; }
 
+        [NotMapped]
+        public string? PendingAmount { get; set; }
         public string? Email { get; set; }
 
         [StringLength(10)]

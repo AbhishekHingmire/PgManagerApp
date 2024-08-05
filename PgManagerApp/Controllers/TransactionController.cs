@@ -42,11 +42,31 @@ namespace PgManagerApp.Controllers
             }).ToList();
 
             //Same for rooms
-            model.Rooms = _context.Rooms.Select(u => new SelectListItem
+            var rooms = _context.Rooms.ToList();
+
+            foreach (var room in rooms)
             {
-                Value = u.Id.ToString(),
-                Text = u.RoomNumber
-            }).ToList();
+                // LINQ query to count the number of users for the specified room
+                int occupiedSpace = _context.Transactions
+               .Where(t => t.RoomId == room.Id) // Filter transactions by the specific RoomId
+               .Select(t => t.UserId) // Select the UserId from the transactions
+               .Distinct() // Ensure unique users (in case of duplicate transactions)
+               .Count(); // Count the number of unique users
+
+                int remainingSpace = Convert.ToInt32(room.Capacity) - occupiedSpace;
+                room.RemainingSpace = remainingSpace.ToString();
+            }
+            var availableRooms = rooms
+    .Where(r => !string.IsNullOrEmpty(r.RemainingSpace) && int.TryParse(r.RemainingSpace, out int remainingSpace) && remainingSpace > 0)
+    .Select(r => new SelectListItem
+    {
+        Value = r.Id.ToString(),
+        Text = r.RoomNumber
+    })
+    .ToList();
+
+
+            model.Rooms = availableRooms;
 
             return View(model);
         }
