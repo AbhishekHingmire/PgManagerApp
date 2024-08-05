@@ -1,16 +1,17 @@
-﻿<!-- Begin Page Content -->
+﻿@model PgManagerApp.Models.DashboardViewModel
+<!-- Begin Page Content -->
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
         <h1 class="h3 mb-0 text-gray-800 m-1">Dashboard</h1>
     </div>
 
     <!-- Content Row -->
-    <div class="row">
+    <div class="row d-fleex justify-content-center align-items-center ">
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 col-sm-6 mt-2">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -18,10 +19,10 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Total Users
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@TempData["UserCount"]</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-user fa-2x text-secondary"></i>
+                            <i class="fas fa-user fa-2x ml-2 text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -29,7 +30,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 col-sm-6 mt-2">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -37,10 +38,10 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Completed Payment(Users)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">78</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CountPaid</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-check fa-2x text-secondary"></i>
+                            <i class="fas fa-check fa-2x ml-2 text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 col-sm-6 mt-2">
             <div class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -56,10 +57,10 @@
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                 Pending Payment(Users)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">42</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CountUnpaid</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-hourglass-half fa-2x text-secondary"></i>
+                            <i class="fas fa-hourglass-half fa-2x ml-2 text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -67,7 +68,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 col-sm-6 mt-2">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -75,10 +76,29 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Total Payment Received
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">₹256000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₹ @Model.TotalAmount</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-rupee-sign fa-2x text-secondary"></i>
+                            <i class="fas fa-rupee-sign fa-2x ml-2 text-secondary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-4 col-md-6 col-sm-6 mt-2">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Total Pending Payment
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₹ @Model.TotalPendingAmount</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-rupee-sign fa-2x ml-2 text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -88,7 +108,7 @@
 
     <!-- Content Row -->
 
-    <div class="row">
+    <div class="row mt-4">
         <!-- Area Chart -->
         <div class="col-xl-12 col-lg-12">
             <!-- Bar Chart Monthly -->

@@ -2,6 +2,15 @@
 using System.ComponentModel.DataAnnotations.Schema;
 namespace PgManagerApp.Models
 {
+    [NotMapped]
+    public class DashboardViewModel
+    {
+        public string? TotalUsers { get; set; }
+        public string? CountPaid { get; set; }
+        public string? CountUnpaid { get; set; }
+        public string? TotalAmount { get; set; }
+        public string? TotalPendingAmount { get; set; }
+    }
 
     public class UserRegistration
     {

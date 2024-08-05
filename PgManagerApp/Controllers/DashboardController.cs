@@ -17,12 +17,63 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            var data = _context.Users.ToList();
-            if(data!=null)
-            {
-                TempData["UserCount"] = data.Count();
-            }
-            return View();
+            var model = new DashboardViewModel();
+
+            var users = _context.Users.ToList();
+
+            model.TotalUsers = users.Count().ToString();
+
+            var transactions = _context.Transactions.ToList();
+
+            // Count of users who paid
+            var paidUserCount = transactions
+                .Select(t => t.UserId)
+                .Distinct()
+                .Count();
+
+            model.CountPaid = paidUserCount.ToString();
+
+            // Count of users who did not pay
+            var userIdsWhoPaid = transactions
+                .Select(t => t.UserId)
+                .Distinct()
+                .ToList();
+
+            var notPaidUserCount = users
+                .Count(u => !userIdsWhoPaid.Contains(u.Id));
+
+            model.CountUnpaid = notPaidUserCount.ToString();
+
+            // Calculate total paid amount after converting string to decimal
+            var totalPaidAmount = transactions
+                .Select(t =>
+                {
+                    // Try to parse the AmountPaid, defaulting to 0 if parsing fails
+                    decimal.TryParse(t.AmountPaid, out var amountPaid);
+                    return amountPaid;
+                })
+                .Sum();
+
+            var totalRoomCharge = transactions
+                .Select(t =>
+                {
+                    // Try to parse the AmountPaid, defaulting to 0 if parsing fails
+                    decimal.TryParse(t.ChargeAmount, out var amountPaid);
+                    return amountPaid;
+                })
+                .Sum();
+
+            var totalNotPaidAmount = totalRoomCharge - totalPaidAmount;
+
+            model.TotalPendingAmount = totalNotPaidAmount.ToString();
+
+            model.TotalAmount = totalPaidAmount.ToString();
+
+          
+            TempData["UserCount"] = users.Count();
+
+
+            return View(model);
         }
 
         public IActionResult Privacy()
