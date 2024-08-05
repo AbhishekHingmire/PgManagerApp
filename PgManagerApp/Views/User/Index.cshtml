@@ -369,22 +369,38 @@
 </div>
 <!-- End Page Content -->
 <script>
-    function OnClickSubmit() {
+    function OnClickSubmit(event) {
+        // Clear previous validation messages
         $('.custom-validation').text('').hide();
 
         const identityType = $('#identityType').val();
         const identityNumber = $('#identityNumber').val().trim();
 
+        let isValid = true; // Flag to track overall validation status
+
+        // Validate Aadhar number
         if (identityType === 'Aadhar') {
             if (!/^\d{12}$/.test(identityNumber)) {
                 $('#identityNumber').next('.custom-validation').text("Not a valid Aadhar number.").show();
-            }
-        } else if (identityType === 'PAN') {
-            if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(identityNumber)) {
-                $('#identityNumber').next('.custom-validation').text("Not a valid PAN number.").show();
+                isValid = false; // Set validation flag to false
             }
         }
+        // Validate PAN number
+        else if (identityType === 'PAN') {
+            if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(identityNumber)) {
+                $('#identityNumber').next('.custom-validation').text("Not a valid PAN number.").show();
+                isValid = false; // Set validation flag to false
+            }
+        }
+
+        // Prevent form submission if validation fails
+        if (!isValid) {
+            event.preventDefault();
+        }
     }
+
+    // Attach the OnClickSubmit function to the form's submit event
+    document.querySelector('form').addEventListener('submit', OnClickSubmit);
 
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -393,4 +409,5 @@
         });
         myModal.show();
     });
+
 </script>
