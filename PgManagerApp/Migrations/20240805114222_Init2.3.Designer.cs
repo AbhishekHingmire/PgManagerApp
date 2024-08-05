@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PgManagerApp.Models;
 
@@ -11,9 +12,11 @@ using PgManagerApp.Models;
 namespace PgManagerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240805114222_Init2.3")]
+    partial class Init23
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,16 +37,16 @@ namespace PgManagerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("HasCommode")
+                    b.Property<bool?>("HasCommode")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasHotWater")
+                    b.Property<bool?>("HasHotWater")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasShower")
+                    b.Property<bool?>("HasShower")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasWiFi")
+                    b.Property<bool?>("HasWiFi")
                         .HasColumnType("bit");
 
                     b.Property<string>("RoomNumber")

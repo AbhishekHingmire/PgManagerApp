@@ -17,6 +17,9 @@ namespace PgManagerApp.Models
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Enter valid mobile number.")]
         public string? MobileNumber { get; set; }
 
+        [NotMapped]
+        public string? RoomNumber { get; set; }
+
         [Required(ErrorMessage = "Address is required.")]
         public string? Address { get; set; }
 
@@ -30,6 +33,6 @@ namespace PgManagerApp.Models
         [NotMapped]
         public bool ViewOnly { get; set; }
         [NotMapped]
-        public List<UserRegistration> Users { get; set; }
+        public List<UserRegistration>? Users { get; set; }
     }
 }

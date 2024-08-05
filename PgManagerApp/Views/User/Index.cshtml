@@ -42,10 +42,12 @@
                 <div class="modal fade show" id="autoPopupModal" tabindex="-1" aria-labelledby="autoPopupModalLabel" aria-hidden="true" style="display: block;">
                     <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="autoPopupModalLabel">Edit</h5>
-                            <i type="button" class="fas fa-times fa-md text-secondary" data-dismiss="modal"></i>
-                        </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addTransactionModalLabel">Update</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         <div class="modal-body">
                             <form asp-action="AddOrEdit" method="post">
                                 <input asp-for="Id" class="form-control" type="hidden" required>
@@ -88,7 +90,7 @@
                                     <input asp-for="IdentityNumber" id="identityNumber" class="form-control" required>
                                     <span class="text-danger custom-validation"></span>
                                 </div>
-                                <button type="submit" onClick="OnClickSubmit()" class="btn btn-sm btn-primary">Update</button>
+                                    <button type="submit" onClick="OnClickSubmit()" class="btn btn-primary btn-sm"><i class="fa fa-save"></i>Submit</button>
                             </form>
                         </div>
                     </div>
@@ -106,10 +108,12 @@
             <div class="modal fade show" id="autoPopupModal" tabindex="-1" aria-labelledby="autoPopupModalLabel" aria-hidden="true" style="display: block;">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="autoPopupModalLabel">User Details</h5>
-                            <i type="button" class="fas fa-times fa-md text-secondary" data-dismiss="modal"></i>
-                        </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addTransactionModalLabel">User Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         <div class="modal-body">
                             <div class="container m-auto mt-4">
                                 <!-- User Profile Card -->
@@ -157,6 +161,10 @@
                                                     <th scope="row">Created Date:</th>
                                                     <td>@Model.CreatedDate?.ToString("yyyy-MM-dd")</td>
                                                 </tr>
+                                                <tr>
+                                                    <th scope="row">Allocated Room:</th>
+                                                    <td>@Model</td>
+                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -185,10 +193,12 @@
              aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">New User</h5>
-                        <i type="button" class="fas fa-times fa-md text-secondary" data-dismiss="modal"></i>
-                    </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTransactionModalLabel">Add New User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                     <div class="modal-body">
                         <!--Add user form-->
                     <form asp-action="AddOrEdit" method="post">
@@ -231,8 +241,8 @@
                                 <input asp-for="IdentityNumber" id="identityNumber" class="form-control" required>
                                 <span class="text-danger custom-validation"></span>
                             </div>
-                            <button type="submit" onClick="OnClickSubmit()" class="btn btn-sm btn-primary">Submit</button>
-                        </form>
+                        <button type="submit" onClick="OnClickSubmit()" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Submit</button>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -278,7 +288,7 @@
                 <tbody>
                     @{
                         var a = 0;
-                        if (Model.Users != null)
+                        if (Model?.Users?.Count > 0)
                         {
                             foreach (var data in Model.Users)
                             {
@@ -340,7 +350,7 @@
                         {
                             <tr>
                                 <td colspan="4">
-                                    <h3 class="text-center">No data found!</h3>
+                                    <strong class="text-center">No data found!</strong>
                                 </td>
                             </tr>
                         }
