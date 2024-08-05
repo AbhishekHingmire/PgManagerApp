@@ -40,7 +40,7 @@ namespace PgManagerApp.Controllers
                 {
                     _context.Rooms.Add(model);
                     _context.SaveChanges();
-                    TempData["Message"] = "Room added succesfully";
+                    TempData["Message"] = $"Room {model.RoomNumber} added succesfully";
                 }
             }
             else

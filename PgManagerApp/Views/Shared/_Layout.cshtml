@@ -56,18 +56,18 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Transaction" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="~/Transaction">
-                    <i class="fas fa-rupee-sign"></i>
-                    <span>Transactions</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Room" ? "active" : "collapsed")">
                 <a class="nav-link collapsed" href="~/Room">
                     <i class="fas fa-house-user"></i>
                     <span>Rooms</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Transaction" ? "active" : "collapsed")">
+                <a class="nav-link collapsed" href="~/Transaction">
+                    <i class="fas fa-rupee-sign"></i>
+                    <span>Transactions</span>
                 </a>
             </li>
 
