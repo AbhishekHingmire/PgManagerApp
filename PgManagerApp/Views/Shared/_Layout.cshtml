@@ -59,23 +59,15 @@
             <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Transaction" ? "active" : "collapsed")">
                 <a class="nav-link collapsed" href="~/Transaction">
                     <i class="fas fa-rupee-sign"></i>
-                    <span>Add Transaction</span>
+                    <span>Transactions</span>
                 </a>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Room" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="#">
+                <a class="nav-link collapsed" href="~/Room">
                     <i class="fas fa-house-user"></i>
                     <span>Rooms</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "PayHistory" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="#">
-                    <i class="fas fa-clock"></i>
-                    <span>Transaction History</span>
                 </a>
             </li>
 
@@ -87,8 +79,25 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "collapsed")">
+                <a class="nav-link collapsed" href="#">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Invoices</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "collapsed")">
+                <a class="nav-link collapsed" href="#">
+                    <i class="fas fa-clock"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+
+
             <!-- Divider -->
-            <hr class="sidebar-divider">
+            <hr class="sidebar-divider" />
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -97,7 +106,7 @@
 
             <!-- Sidebar Message -->
             <div class="sidebar-card d-none bg-white d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="file:///C:/Users/abhis/OneDrive/Desktop/Theme/PgManager/Icon.png" alt="...">
+                <img class="sidebar-card-illustration mb-2" src="file:///C:/Users/abhis/OneDrive/Desktop/Theme/PgManager/Icon.png" alt="..." />
                 <p class="text-center text-secondary mb-2"><strong>Go Pg</strong> - Online PG & Rental Booking system.</p>
             </div>
 

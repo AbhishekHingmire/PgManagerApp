@@ -20,6 +20,8 @@ namespace PgManagerApp.Controllers
                 users = JsonConvert.DeserializeObject<UserRegistration>(TempData["UserData"].ToString());
             }
             users.Users = _context.Users.ToList();
+            var trans = _context.Transactions.Where(e => e.UserId == users.Id).ToList();
+            
             return View(users);
         }
 
@@ -34,7 +36,7 @@ namespace PgManagerApp.Controllers
                 _context.Users.Remove(userDetails);
                 _context.SaveChanges();
             }
-            TempData["Message"] = "User succesfully deleted";
+            TempData["Message"] = "User succesfully deleted.";
             return RedirectToAction("Index");
         }
 
