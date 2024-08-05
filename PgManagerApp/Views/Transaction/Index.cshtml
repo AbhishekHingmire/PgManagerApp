@@ -1,0 +1,133 @@
+﻿<style>
+    /* Style for the container to make it scrollable */
+    .scrollable-container {
+        max-height: 800px;
+        overflow-y: auto;
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: #007bff #f1f1f1; /* Firefox */
+    }
+
+        /* For WebKit browsers (Chrome, Safari) */
+        .scrollable-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .scrollable-container::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 10px;
+            border: 2px solid #f1f1f1;
+        }
+
+            .scrollable-container::-webkit-scrollbar-thumb:hover {
+                background-color: #0056b3;
+            }
+</style>
+
+<div class="container mt-5">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800 m-1">Transaction Management</h1>
+        <a href="#" class="d-sm-inline-block btn btn-sm m-1 btn-primary shadow-sm" data-toggle="modal"
+           data-target="#addTransactionModal"><i class="fas fa-plus fa-md text-white-50"></i> Add Transaction</a>
+    </div>
+
+        <!-- Transactions List -->
+    <div class="shadow rounded">
+        <div class="scrollable-container" style="overflow-y: auto; overflow-x: auto; position: relative;">
+            <table class="table table-borderless table-light">
+            <thead class="thead bg-primary text-white" style="position: sticky; top: -1px; z-index: 1;">
+                            <tr>
+                                <th>User</th>
+                                <th>Charge Amount</th>
+                                <th>Amount Paid</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            <!-- Populate transactions dynamically -->
+                            <tr>
+                                <td>John Doe</td>
+                                <td>Rs.500</td>
+                                <td>Rs.500.00</td>
+                                <td>2024-08-01</td>
+                                <td>2024-09-31</td>
+                            <td class="row">
+                                <!-- View Button Form -->
+                                <form>
+                                    <input type="hidden" name="Id" value="" />
+                                    <input type="hidden" name="Id" value="" />
+                                    <button type="submit" class="btn bg-light text-info btn-sm m-1">
+                                        <i class="fas fa-edit"></i>
+                                        Update
+                                    </button>
+                                </form>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    </div>
+
+        <!-- Add Transaction Modal -->
+        <div class="modal fade" id="addTransactionModal" tabindex="-1" role="dialog" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTransactionModalLabel">Add New Transaction</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/transactions/add" method="post">
+                            <div class="form-group">
+                                <label for="user">Select User:</label>
+                                <select id="user" name="user" class="form-control">
+                                    <!-- Populate users dynamically -->
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Jane Smith</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="room">Select Room:</label>
+                                <select id="room" name="room" class="form-control">
+                                    <!-- Populate rooms dynamically -->
+                                    <option value="101">Room 101</option>
+                                    <option value="102">Room 102</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="charge-amount">Charge Amount:</label>
+                                <input id="charge-amount" name="charge-amount" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="amount-paid">Amount Paid:</label>
+                                <input id="amount-paid" name="amount-paid" class="form-control" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="start-date">Start Date:</label>
+                                <input type="date" id="start-date" name="start-date" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="end-date">End Date:</label>
+                                <input type="date" id="end-date" name="end-date" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
