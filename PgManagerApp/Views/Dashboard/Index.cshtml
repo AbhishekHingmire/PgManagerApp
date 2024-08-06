@@ -1,4 +1,18 @@
 ﻿@model PgManagerApp.Models.DashboardViewModel
+
+<style>
+    /* Ensure the chart container is scrollable */
+    .scrollable-container {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Optional: style the chart container for better presentation */
+    #chartContainer {
+        display: inline-block;
+    }
+</style>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -36,7 +50,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Completed Payment(Users)
+                                Room Allocated(Users)
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CountPaid</div>
                         </div>
@@ -55,7 +69,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Pending Payment(Users)
+                                Room Not Allocated(Users)
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CountUnpaid</div>
                         </div>
@@ -106,24 +120,33 @@
         </div>
     </div>
 
-    <!-- Content Row -->
+    <!-- Chart Row -->
 
-    <div class="row mt-4">
-        <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-12">
-            <!-- Bar Chart Monthly -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Monthly Users</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-bar">
-                        <canvas id="myBarChart"></canvas>
-                    </div>
-                    <hr>
+
+        <div class="container mt-4 mb-4 bg-white rounded">
+           <div class="row">
+            <strong class="text-center m-4">Weekly Users</strong>
+                <div class="col-12 scrollable-container">
+                
+                    <div id="chartContainer" style="height: 500px; width: 100%;"></div>
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 <!-- End Page Content -->
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            data: [
+                {
+                    type: "column",
+                    dataPoints: @Html.Raw(ViewBag.DataPoints)
+                        }
+            ]
+        });
+        chart.render();
+    };
+</script>

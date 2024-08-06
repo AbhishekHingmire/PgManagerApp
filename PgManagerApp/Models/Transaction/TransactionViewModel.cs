@@ -35,11 +35,11 @@ namespace PgManagerApp.Models.Transaction
 
         [Required(ErrorMessage="Please enter start date.")]
         [Display(Name = "Start Date*")]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Today;
 
         [Required(ErrorMessage = "Please enter end date.")]
         [Display(Name = "End Date*")]
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; } = DateTime.Today;
 
         [NotMapped]
         public bool IsEditable { get; set; } = false;

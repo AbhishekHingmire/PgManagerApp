@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PgManagerApp.Models;
 using System.Diagnostics;
+using System.Globalization;
+using System.Text.Json;
 
 namespace PgManagerApp.Controllers
 {
@@ -69,9 +71,36 @@ namespace PgManagerApp.Controllers
 
             model.TotalAmount = totalPaidAmount.ToString();
 
-          
-            TempData["UserCount"] = users.Count();
 
+            //CHartData
+            var daysOfWeek = new List<DayOfWeek>
+            {
+                DayOfWeek.Sunday,
+    DayOfWeek.Monday,
+    DayOfWeek.Tuesday,
+    DayOfWeek.Wednesday,
+    DayOfWeek.Thursday,
+    DayOfWeek.Friday,
+    DayOfWeek.Saturday
+};
+
+            var weeklyData = transactions
+                .GroupBy(t => t.StartDate.DayOfWeek)
+                .Select(g => new
+                {
+                    Day = g.Key,
+                    Count = g.Count()
+                })
+                .ToDictionary(x => x.Day, x => x.Count); // Convert to dictionary for easy lookup
+
+            // Prepare data for the chart in the correct order
+            var dataPoints = daysOfWeek.Select(day => new
+            {
+                label = day.ToString(),
+                y = weeklyData.ContainsKey(day) ? weeklyData[day] : 0
+            }).ToList();
+
+            ViewBag.DataPoints = JsonSerializer.Serialize(dataPoints);
 
             return View(model);
         }

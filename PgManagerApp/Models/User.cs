@@ -3,6 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PgManagerApp.Models
 {
     [NotMapped]
+    public class UserAddition
+    {
+        public string UserName { get; set; }
+        public DateTime AddedDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    [NotMapped]
     public class DashboardViewModel
     {
         public string? TotalUsers { get; set; }
