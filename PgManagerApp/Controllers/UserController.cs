@@ -25,17 +25,28 @@ namespace PgManagerApp.Controllers
             }
             users.Users = _context.Users.ToList();
 
-            foreach(var data in users.Users)
+            foreach (var user in users.Users)
             {
-                string paid = _context.Transactions.Where(x => x.UserId == data.Id).Select(x => x.AmountPaid).FirstOrDefault();
-                string charge = _context.Transactions.Where(x => x.UserId == data.Id).Select(x => x.ChargeAmount).FirstOrDefault();
-                
+                // Convert nvarchar to decimal and aggregate the totals for each user
+                var totalCharge = _context.Transactions
+                    .Where(x => x.UserId == user.Id)
+                    .Select(x => Convert.ToDecimal(x.ChargeAmount))
+                    .Sum();
 
-                int pending = Convert.ToInt32(charge) - Convert.ToInt32(paid);
-                data.PendingAmount = Convert.ToString(pending);
+                var totalPaid = _context.Transactions
+                    .Where(x => x.UserId == user.Id)
+                    .Select(x => Convert.ToDecimal(x.AmountPaid))
+                    .Sum();
+
+                // Calculate the pending amount
+                var pendingAmount = totalCharge - totalPaid;
+
+                // Set the pending amount in the user object
+                user.PendingAmount = pendingAmount.ToString();
             }
-            
-            
+
+
+
             return View(users);
         }
 
