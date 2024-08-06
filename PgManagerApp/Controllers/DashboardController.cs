@@ -74,15 +74,15 @@ namespace PgManagerApp.Controllers
 
             //CHartData
             var daysOfWeek = new List<DayOfWeek>
-            {
-                DayOfWeek.Sunday,
-    DayOfWeek.Monday,
-    DayOfWeek.Tuesday,
-    DayOfWeek.Wednesday,
-    DayOfWeek.Thursday,
-    DayOfWeek.Friday,
-    DayOfWeek.Saturday
-};
+    {
+        DayOfWeek.Sunday,
+        DayOfWeek.Monday,
+        DayOfWeek.Tuesday,
+        DayOfWeek.Wednesday,
+        DayOfWeek.Thursday,
+        DayOfWeek.Friday,
+        DayOfWeek.Saturday
+    };
 
             var weeklyData = transactions
                 .GroupBy(t => t.StartDate.DayOfWeek)
@@ -93,7 +93,6 @@ namespace PgManagerApp.Controllers
                 })
                 .ToDictionary(x => x.Day, x => x.Count); // Convert to dictionary for easy lookup
 
-            // Prepare data for the chart in the correct order
             var dataPoints = daysOfWeek.Select(day => new
             {
                 label = day.ToString(),
@@ -101,6 +100,7 @@ namespace PgManagerApp.Controllers
             }).ToList();
 
             ViewBag.DataPoints = JsonSerializer.Serialize(dataPoints);
+            ViewBag.UserCounts = weeklyData;
 
             return View(model);
         }

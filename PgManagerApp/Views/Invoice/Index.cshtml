@@ -1,0 +1,118 @@
+﻿@using Newtonsoft.Json
+@{
+    // Declare the variable outside of the `if` block
+    InvoiceViewModel invoiceData = null;
+
+    // Retrieve and deserialize the TempData
+    var invoiceDataJson = TempData["InvoiceData"] as string;
+    if (!string.IsNullOrEmpty(invoiceDataJson))
+    {
+        invoiceData = JsonConvert.DeserializeObject<InvoiceViewModel>(invoiceDataJson);
+    }
+}
+
+<style>
+    .form-group.row {
+        margin-bottom: 0; /* Remove bottom margin to align properly */
+    }
+
+    .form-control,
+    .btn {
+        height: calc(1.5em + .75rem + 2px); /* Match the height of the button to the input */
+        line-height: 1.5;
+    }
+
+    .btn {
+        padding: .375rem .75rem; /* Adjust padding for consistent button size */
+        font-size: .875rem; /* Adjust font size to match the form control */
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800 m-1">Invoice Manager</h1>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    <div class="container-fluid bg-white p-2 rounded shadow">
+        <form asp-action="GenerateInvoice" method="post">
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <select id="userSelect" name="Id" class="form-control" required>
+                        <option value="">Select a User</option>
+                        @foreach (var user in (List<SelectListItem>)ViewBag.Users)
+                        {
+                            <option value="@user.Value">@user.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        @if (invoiceData != null)
+        {
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Invoice for @invoiceData.UserName</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Mobile Number:</strong> @invoiceData.MobileNumber</p>
+                    <p><strong>Email:</strong> @invoiceData.Email</p>
+                    <p><strong>Total Charge Amount:</strong> ₹ @invoiceData.TotalChargeAmount</p>
+                    <p><strong>Total Paid Amount:</strong> ₹ @invoiceData.TotalPaidAmount</p>
+                </div>
+            </div>
+
+            <h3>Room Details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Charge Amount</th>
+                        <th>Paid Amount</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (invoiceData.RoomDetails != null && invoiceData.RoomDetails.Any())
+                    {
+                        @foreach (var room in invoiceData.RoomDetails)
+                        {
+                            <tr>
+                                <td>@room.RoomNumber</td>
+                                <td>₹ @room.ChargeAmount</td>
+                                <td>₹ @room.PaidAmount</td>
+                                <td>@room.StartDate</td>
+                                <td>@room.EndDate</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No room details available.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <br></br>
+            <strong>No data available.</strong>
+        }
+    </div>
+
+</div>

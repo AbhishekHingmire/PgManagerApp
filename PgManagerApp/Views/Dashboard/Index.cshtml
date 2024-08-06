@@ -1,4 +1,5 @@
-﻿@model PgManagerApp.Models.DashboardViewModel
+﻿@using System.Text.Json
+@model PgManagerApp.Models.DashboardViewModel
 
 <style>
     /* Ensure the chart container is scrollable */
@@ -17,11 +18,14 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800 m-1">Dashboard</h1>
+        <a href="#" id="downloadPdfBtn"  class="d-sm-inline-block btn btn-sm m-1 btn-primary shadow-sm" data-toggle="modal"
+           data-target="#exampleModal"><i class="fas fa-download mr-1 fa-md text-white-50"></i> Download Report</a>
     </div>
 
     <!-- Content Row -->
+    <div class="downloadReport">
     <div class="row d-fleex justify-content-center align-items-center ">
 
         <!-- Earnings (Monthly) Card Example -->
@@ -132,10 +136,14 @@
                 </div>
             </div>
         </div>
+    </div>
 
 </div>
 <!-- End Page Content -->
 <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
+
 
 <script type="text/javascript">
     window.onload = function () {
@@ -149,4 +157,120 @@
         });
         chart.render();
     };
+
+
+    document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+        // Retrieve user counts and other details from ViewBag
+        var userCounts = @Html.Raw(JsonSerializer.Serialize(ViewBag.UserCounts));
+        var totalUsers = @Model.TotalUsers;
+        var pendingUsers = @Model.CountUnpaid;
+        var allocatedUsers = @Model.CountPaid;
+        var totalPendingPay = @Model.TotalPendingAmount;
+        var totalAmount = @Model.TotalAmount;
+
+        // Create the user count table body
+        var tableBody = [
+            [{ text: 'Day', style: 'tableHeader' }, { text: 'User Count', style: 'tableHeader' }]
+        ];
+
+        // Populate the user count table with data
+        Object.keys(userCounts).forEach(day => {
+            tableBody.push([day, userCounts[day]]);
+        });
+
+        // Define the PDF document
+        var docDefinition = {
+            content: [
+                { text: 'User Report', style: 'header' },
+                { text: 'Date: ' + new Date().toLocaleDateString(), style: 'subheader' },
+
+                // First table with other details
+                {
+                    table: {
+                        widths: ['*', '*'],
+                        body: [
+                            [{ text: 'Metric', style: 'tableHeader' }, { text: 'Value', style: 'tableHeader' }],
+                            ['Total Users', totalUsers],
+                            ['Pending Users', pendingUsers],
+                            ['Allocated Users', allocatedUsers],
+                            ['Total Pending Payment', '₹ ' + totalPendingPay],
+                            ['Total Amount Received', '₹ ' + totalAmount]
+                        ]
+                    },
+                    layout: {
+                        fillColor: function (rowIndex, node, columnIndex) {
+                            return rowIndex === 0 ? '#f1f1f1' : null;
+                        },
+                        hLineColor: function (i, node) {
+                            return i === 0 ? 'black' : '#ddd';
+                        },
+                        vLineColor: function (i, node) {
+                            return i === 0 ? 'black' : '#ddd';
+                        },
+                        hLineWidth: function (i, node) {
+                            return i === 0 ? 2 : 1;
+                        },
+                        vLineWidth: function (i, node) {
+                            return i === 0 ? 2 : 1;
+                        },
+                        paddingLeft: function (i) { return i === 0 ? 0 : 8; },
+                        paddingRight: function (i, node) { return i === node.table.widths.length - 1 ? 0 : 8; }
+                    }
+                },
+
+                // Space between tables
+                { text: '', margin: [0, 10] },
+
+                { text: 'Weekly User Counts', style: 'subheader' },
+                {
+                    table: {
+                        widths: ['*', '*'],
+                        body: tableBody
+                    },
+                    layout: {
+                        fillColor: function (rowIndex, node, columnIndex) {
+                            return rowIndex === 0 ? '#f1f1f1' : null;
+                        },
+                        hLineColor: function (i, node) {
+                            return i === 0 ? 'black' : '#ddd';
+                        },
+                        vLineColor: function (i, node) {
+                            return i === 0 ? 'black' : '#ddd';
+                        },
+                        hLineWidth: function (i, node) {
+                            return i === 0 ? 2 : 1;
+                        },
+                        vLineWidth: function (i, node) {
+                            return i === 0 ? 2 : 1;
+                        },
+                        paddingLeft: function (i) { return i === 0 ? 0 : 8; },
+                        paddingRight: function (i, node) { return i === node.table.widths.length - 1 ? 0 : 8; }
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    alignment: 'center',
+                    margin: [0, 20, 0, 10]
+                },
+                subheader: {
+                    fontSize: 14,
+                    alignment: 'center',
+                    margin: [0, 0, 0, 10]
+                },
+                tableHeader: {
+                    bold: true,
+                    fontSize: 12,
+                    color: 'black',
+                    fillColor: '#f1f1f1',
+                    alignment: 'center'
+                }
+            }
+        };
+
+        // Create and download the PDF
+        pdfMake.createPdf(docDefinition).download('User_Report.pdf');
+    });
 </script>

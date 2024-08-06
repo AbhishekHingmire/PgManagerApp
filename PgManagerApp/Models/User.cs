@@ -1,7 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PgManagerApp.Models.Room;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace PgManagerApp.Models
 {
+    [NotMapped]
+    public class InvoiceViewModel
+    {
+        public string? UserName { get; set; }
+        public string? MobileNumber { get; set; }
+        public string? Email { get; set; }
+        public List<RoomDetail>? RoomDetails { get; set; }
+        public string? TotalChargeAmount { get; set; }
+        public string? TotalPaidAmount { get; set; }
+    }
+
+    [NotMapped]
+    public class RoomDetail
+    {
+        public string RoomNumber { get; set; }
+        public string ChargeAmount { get; set; }
+        public string PaidAmount { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
+
+
     [NotMapped]
     public class UserAddition
     {

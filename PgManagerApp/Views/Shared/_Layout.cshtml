@@ -72,29 +72,20 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "PayReminders" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="#">
+            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "PaymentReminder" ? "active" : "collapsed")">
+                <a class="nav-link collapsed" href="~/PaymentReminder">
                     <i class="fas fa-bell"></i>
                     <span>Payment Reminders</span>
                 </a>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="#">
+            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Invoice" ? "active" : "collapsed")">
+                <a class="nav-link collapsed" href="~/Invoice">
                     <i class="fas fa-file-invoice"></i>
                     <span>Invoices</span>
                 </a>
             </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="#">
-                    <i class="fas fa-clock"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
-
 
             <!-- Divider -->
             <hr class="sidebar-divider" />

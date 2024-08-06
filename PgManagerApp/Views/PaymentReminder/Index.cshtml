@@ -1,0 +1,98 @@
+﻿@model PgManagerApp.Models.UserRegistration
+
+<style>
+    /* Style for the container to make it scrollable */
+    .scrollable-container {
+        max-height: 800px;
+        overflow-y: auto;
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: #007bff #f1f1f1; /* Firefox */
+    }
+
+        /* For WebKit browsers (Chrome, Safari) */
+        .scrollable-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .scrollable-container::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 10px;
+            border: 2px solid #f1f1f1;
+        }
+
+            .scrollable-container::-webkit-scrollbar-thumb:hover {
+                background-color: #0056b3;
+            }
+</style>
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800 m-1">Payment Reminders</h1>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="shadow rounded  mb-4">
+        <div class="scrollable-container" style="overflow-y: auto; overflow-x: auto; position: relative;">
+            <table class="table align-middle bg-white rounded">
+                <thead class="thead bg-primary text-white" style="position: sticky; top: -1px; z-index: 1;">
+                    <tr>
+                        <th>User</th>
+                        <th>Mobile</th>
+                        <th>Pending Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            <tbody>
+                @if(Model?.Users?.Count > 0)
+                {
+                @foreach (var user in Model.Users)
+                {
+                    @if(user.PendingAmount!="0")
+                    {
+                    <tr>
+                        <td>@user.Name</td>
+                        <td>+91 @user.MobileNumber</td>
+                                <td class="text-danger">₹ @user.PendingAmount</td>
+                        <td>
+                            <form asp-action="" method="post">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                            <button type="submit" onclick="sendReminder('@user.MobileNumber', '@user.PendingAmount')" class="btn bg-light text-primary btn-sm">
+                                    <i class="fa fa-envelope"></i> Send Reminder
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    }
+                 }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">
+                                <strong class="text-center">No users found!</strong>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+    <script type="text/javascript">
+        function sendReminder(mobileNumber, pendingAmount) {
+            const message = encodeURIComponent(`This is a reminder for your payment of ₹ ${pendingAmount}. Please pay the pending amount as soon as possible!`);
+            const url = `https://wa.me/${mobileNumber}?text=${message}`;
+            window.open(url, '_blank');
+        }
+    </script>
