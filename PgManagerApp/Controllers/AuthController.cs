@@ -37,7 +37,7 @@ namespace PgManagerApp.Controllers
                 model.PasswordHash = HashPassword(model.PasswordHash);
                 _context.MasterUser.Add(model);
                 _context.SaveChanges();
-                TempData["Message"] = $"User succesfully created";
+                TempData["Message"] = $"User account has been created, you can log in now.";
                 return RedirectToAction("Login");
             }
             return View("Register", model);
@@ -66,7 +66,7 @@ namespace PgManagerApp.Controllers
                 }
                 else
                 {
-                    TempData["Error"] = "Invalid email/password";
+                    TempData["Error"] = "Invalid email or password";
                 }
                 
             }

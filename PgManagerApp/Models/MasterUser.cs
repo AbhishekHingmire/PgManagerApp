@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PgManagerApp.Models
 {
@@ -20,6 +21,7 @@ namespace PgManagerApp.Models
         public string? PasswordHash { get; set; } // Changed from HashPassword for consistency
     }
 
+    [NotMapped]
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Email is required")]

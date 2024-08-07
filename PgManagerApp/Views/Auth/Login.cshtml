@@ -5,6 +5,7 @@
     ViewData["Title"] = "Login";
 }
 
+
 <head>
 
     <meta charset="utf-8">
@@ -30,23 +31,24 @@
     <div class="container">
 
         <!-- Outer Row -->
-        <div class="row justify-content-center">
-
-            <div class="col-xl-10 col-lg-12 col-md-9">
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <!-- Left side with image -->
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <img src="https://img.freepik.com/free-vector/access-control-system-abstract-concept_335657-3180.jpg?w=740&t=st=1723061997~exp=1723062597~hmac=3ecf3ad4d84f3ad94cc1bf146607f8f1b99257022eae649b12bfc9acb2ddf5ed" class="img-fluid" alt="Login Image">
+                            </div>
+                            <!-- Right side with form -->
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4"><strong>Welcome back!</strong></h1>
                                     </div>
-                                    @if (TempData["Message"]!=null)
+                                    @if (TempData["Message"] != null)
                                     {
-                                        <h3 class="text-success">@TempData["Message"]</h3>
+                                        <h6 class="m-3"><strong class="text-success">@TempData["Message"]</strong></h6>
                                     }
                                     <form class="user" asp-action="LoginUser" method="Post">
                                         <div class="form-group">
@@ -73,9 +75,10 @@
                                         </button>
                                         @if (TempData["Error"] != null)
                                         {
-                                            <h6 class="text-danger mt-3">@TempData["Error"]</h6>
+                                            <h6 class="text-danger mt-4"><strong>@TempData["Error"]</strong></h6>
                                         }
                                     </form>
+
                                     <hr>
                                     <div class="text-center">
                                         <a class="small" href="~/Auth/Register">Create an Account!</a>
@@ -83,13 +86,9 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
-            </div>
-
-        </div>
-
     </div>
 
     <!-- Bootstrap core JavaScript-->
@@ -105,3 +104,6 @@
 </body>
 
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>

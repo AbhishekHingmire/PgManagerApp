@@ -122,7 +122,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="AddOrEdit" method="post">
+                <form asp-action="AddOrEdit" method="post" onsubmit="return disableSubmitButton(this);">
                     <input type="hidden" asp-for="MasterId" />
                     <!-- Room Number/Name -->
                     <div class="form-group">
@@ -198,8 +198,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="container m-auto mt-4">
-                        <form asp-action="AddOrEdit" method="post">
+                        <form asp-action="AddOrEdit" method="post" onsubmit="return disableSubmitButton(this);">
                             <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="MasterId" />
                             <!-- Room Number/Name -->
                             <div class="form-group">
                                 <label asp-for="RoomNumber" class="form-label"></label>
@@ -267,4 +268,9 @@
         });
         myModal.show();
     });
+
+    function disableSubmitButton(form) {
+        form.querySelector('button[type="submit"]').disabled = true;
+        return true;
+    }
 </script>

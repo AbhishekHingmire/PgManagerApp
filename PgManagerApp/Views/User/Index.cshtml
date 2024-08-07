@@ -60,8 +60,9 @@
                                 </button>
                             </div>
                         <div class="modal-body">
-                            <form asp-action="AddOrEdit" method="post">
+                                <form asp-action="AddOrEdit" method="post" onsubmit="return disableSubmitButton(this);">
                                 <input asp-for="Id" class="form-control" type="hidden" required>
+                                <input asp-for="MasterId" class="form-control" type="hidden" required>
                                 <div class="mb-3">
                                     <label class="form-label">Name*</label>
                                     <input asp-for="Name" class="form-control" required>
@@ -208,7 +209,7 @@
                 </div>
                     <div class="modal-body">
                         <!--Add user form-->
-                    <form asp-action="AddOrEdit" method="post">
+                    <form asp-action="AddOrEdit" method="post" onsubmit="return disableSubmitButton(this);">
                         <input type="hidden"asp-for="MasterId" />
 
                             <div class="mb-3">
@@ -417,4 +418,9 @@
         myModal.show();
     });
 
+
+    function disableSubmitButton(form) {
+        form.querySelector('button[type="submit"]').disabled = true;
+        return true;
+    }
 </script>

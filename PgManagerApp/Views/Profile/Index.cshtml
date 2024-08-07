@@ -40,7 +40,7 @@
 
                 <!-- Form -->
                 <div class="col-12 col-md-8">
-                    <form asp-action="UpdateMaster" class="p-3" method="post">
+                    <form asp-action="UpdateMaster" class="p-3" method="post" onsubmit="return disableSubmitButton(this);">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="form-group">
@@ -72,3 +72,9 @@
     </div>
 
 </div>
+<script>
+    function disableSubmitButton(form) {
+        form.querySelector('button[type="submit"]').disabled = true;
+        return true;
+    }
+</script>

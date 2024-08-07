@@ -62,15 +62,22 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteUser(int Id)
         {
-            var userDetails = new UserRegistration();
-            userDetails = _context.Users.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
-            if (userDetails != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
-                _context.Users.Remove(userDetails);
-                _context.SaveChanges();
+                var userDetails = new UserRegistration();
+                userDetails = _context.Users.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
+                if (userDetails != null)
+                {
+                    _context.Users.Remove(userDetails);
+                    _context.SaveChanges();
+                }
+                TempData["Message"] = "User succesfully deleted.";
+                return RedirectToAction("Index");
             }
-            TempData["Message"] = "User succesfully deleted.";
-            return RedirectToAction("Index");
+            else
+            {
+                return RedirectToAction("Login", "Auth");
+            }
         }
 
         [HttpPost]
