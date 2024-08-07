@@ -209,6 +209,8 @@
                     <div class="modal-body">
                         <!--Add user form-->
                     <form asp-action="AddOrEdit" method="post">
+                        <input type="hidden"asp-for="MasterId" />
+
                             <div class="mb-3">
                                 <label class="form-label">Name*</label>
                                 <input asp-for="Name" class="form-control" required>

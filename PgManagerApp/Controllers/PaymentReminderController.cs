@@ -13,29 +13,36 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            var users = new UserRegistration();
-            users.Users = _context.Users.ToList();
-
-            foreach (var user in users.Users)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
             {
-                // Convert nvarchar to decimal and aggregate the totals for each user
-                var totalCharge = _context.Transactions
-                    .Where(x => x.UserId == user.Id)
-                    .Select(x => Convert.ToInt32(x.ChargeAmount))
-                .Sum();
+                var users = new UserRegistration();
+                users.Users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
 
-                var totalPaid = _context.Transactions
-                    .Where(x => x.UserId == user.Id)
-                    .Select(x => Convert.ToInt32(x.AmountPaid))
+                foreach (var user in users.Users)
+                {
+                    // Convert nvarchar to decimal and aggregate the totals for each user
+                    var totalCharge = _context.Transactions
+                        .Where(x => x.UserId == user.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
+                        .Select(x => Convert.ToInt32(x.ChargeAmount))
                     .Sum();
 
-                // Calculate the pending amount
-                var pendingAmount = totalCharge - totalPaid;
+                    var totalPaid = _context.Transactions
+                        .Where(x => x.UserId == user.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
+                        .Select(x => Convert.ToInt32(x.AmountPaid))
+                        .Sum();
 
-                // Set the pending amount in the user object
-                user.PendingAmount = pendingAmount.ToString();
+                    // Calculate the pending amount
+                    var pendingAmount = totalCharge - totalPaid;
+
+                    // Set the pending amount in the user object
+                    user.PendingAmount = pendingAmount.ToString();
+                }
+                return View(users);
             }
-            return View(users);
+            else
+            {
+                return RedirectToAction("Login", "Auth");
+            }
         }
     }
 }

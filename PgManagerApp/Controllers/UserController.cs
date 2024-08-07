@@ -15,39 +15,47 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            var users = new UserRegistration();
-            if (TempData["UserData"] != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
             {
-                users = JsonConvert.DeserializeObject<UserRegistration>(TempData["UserData"].ToString());
-                int RoomId = _context.Transactions.Where(x => x.UserId == users.Id).Select(x => x.RoomId).FirstOrDefault();
-                string RoomNo = _context.Rooms.Where(x => x.Id == RoomId).Select(x => x.RoomNumber).FirstOrDefault();
-                users.RoomNumber = RoomNo;
-            }
-            users.Users = _context.Users.ToList();
+                var users = new UserRegistration();
+                users.MasterId = HttpContext.Session.GetInt32("MasterUserId");
+                if (TempData["UserData"] != null)
+                {
+                    users = JsonConvert.DeserializeObject<UserRegistration>(TempData["UserData"].ToString());
+                    int RoomId = _context.Transactions.Where(x => x.UserId == users.Id).Select(x => x.RoomId).FirstOrDefault();
+                    string RoomNo = _context.Rooms.Where(x => x.Id == RoomId).Select(x => x.RoomNumber).FirstOrDefault();
+                    users.RoomNumber = RoomNo;
+                }
+                users.Users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
 
-            foreach (var user in users.Users)
+                foreach (var user in users.Users)
+                {
+                    // Convert nvarchar to decimal and aggregate the totals for each user
+                    var totalCharge = _context.Transactions
+                        .Where(x => x.UserId == user.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
+                        .Select(x => Convert.ToDecimal(x.ChargeAmount))
+                        .Sum();
+
+                    var totalPaid = _context.Transactions
+                        .Where(x => x.UserId == user.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
+                        .Select(x => Convert.ToDecimal(x.AmountPaid))
+                        .Sum();
+
+                    // Calculate the pending amount
+                    var pendingAmount = totalCharge - totalPaid;
+
+                    // Set the pending amount in the user object
+                    user.PendingAmount = pendingAmount.ToString();
+                }
+
+
+
+                return View(users);
+            }
+            else
             {
-                // Convert nvarchar to decimal and aggregate the totals for each user
-                var totalCharge = _context.Transactions
-                    .Where(x => x.UserId == user.Id)
-                    .Select(x => Convert.ToDecimal(x.ChargeAmount))
-                    .Sum();
-
-                var totalPaid = _context.Transactions
-                    .Where(x => x.UserId == user.Id)
-                    .Select(x => Convert.ToDecimal(x.AmountPaid))
-                    .Sum();
-
-                // Calculate the pending amount
-                var pendingAmount = totalCharge - totalPaid;
-
-                // Set the pending amount in the user object
-                user.PendingAmount = pendingAmount.ToString();
+                return RedirectToAction("Login", "Auth");
             }
-
-
-
-            return View(users);
         }
 
         [HttpPost]
@@ -55,7 +63,7 @@ namespace PgManagerApp.Controllers
         public IActionResult DeleteUser(int Id)
         {
             var userDetails = new UserRegistration();
-            userDetails = _context.Users.Where(x => x.Id == Id).FirstOrDefault();
+            userDetails = _context.Users.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
             if (userDetails != null)
             {
                 _context.Users.Remove(userDetails);
@@ -69,35 +77,42 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(UserRegistration newUser)
         {
-            var usr = new UserRegistration();
-
-            if (newUser.Id == 0)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
             {
-                if (ModelState.IsValid)
+                var usr = new UserRegistration();
+
+                if (newUser.Id == 0)
                 {
-                    _context.Users.Add(newUser);
-                    _context.SaveChanges();
-                    TempData["Message"] = "User succesfully added.";
+                    if (ModelState.IsValid)
+                    {
+                        _context.Users.Add(newUser);
+                        _context.SaveChanges();
+                        TempData["Message"] = "User succesfully added.";
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Something went wrong!";
+                    }
                 }
                 else
                 {
-                    TempData["Error"] = "Something went wrong!";
+                    if (ModelState.IsValid)
+                    {
+                        _context.Users.Update(newUser);
+                        _context.SaveChanges();
+                        TempData["Message"] = "User succesfully updated.";
+                        return RedirectToAction("Index");
+                    }
+                    usr = _context.Users.Where(x => x.Id == newUser.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
+                    usr.ViewOnly = newUser.ViewOnly;
+                    TempData["UserData"] = JsonConvert.SerializeObject(usr);
                 }
+                return RedirectToAction("Index");
             }
             else
             {
-                if(ModelState.IsValid)
-                {
-                    _context.Users.Update(newUser);
-                    _context.SaveChanges();
-                    TempData["Message"] = "User succesfully updated.";
-                    return RedirectToAction("Index");
-                }
-                usr = _context.Users.Where(x => x.Id == newUser.Id).FirstOrDefault();
-                usr.ViewOnly = newUser.ViewOnly;
-                TempData["UserData"] = JsonConvert.SerializeObject(usr);
+                return RedirectToAction("Login", "Auth");
             }
-            return RedirectToAction("Index");
         }
     }
 }

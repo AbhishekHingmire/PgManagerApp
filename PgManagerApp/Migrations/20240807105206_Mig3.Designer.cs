@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PgManagerApp.Models;
 
@@ -11,9 +12,11 @@ using PgManagerApp.Models;
 namespace PgManagerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240807105206_Mig3")]
+    partial class Mig3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,7 +75,7 @@ namespace PgManagerApp.Migrations
                     b.Property<bool>("HasWiFi")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MasterId")
+                    b.Property<int>("MasterId")
                         .HasColumnType("int");
 
                     b.Property<string>("RoomNumber")
@@ -103,7 +106,7 @@ namespace PgManagerApp.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MasterId")
+                    b.Property<int>("MasterId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoomId")
@@ -149,7 +152,7 @@ namespace PgManagerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MasterId")
+                    b.Property<int>("MasterId")
                         .HasColumnType("int");
 
                     b.Property<string>("MobileNumber")

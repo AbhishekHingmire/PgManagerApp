@@ -15,7 +15,9 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            var users = _context.Users
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            {
+                var users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
             .Select(u => new SelectListItem
             {
                 Value = u.Id.ToString(),
@@ -23,16 +25,22 @@ namespace PgManagerApp.Controllers
             })
             .ToList();
 
-            ViewBag.Users = users;
-            return View();
+                ViewBag.Users = users;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Auth");
+            }
         }
         
         [HttpPost]
         public IActionResult GenerateInvoice(string Id)
         {
-           
-            var user = _context.Users
-            .Where(u => u.Id == Convert.ToInt32(Id))
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            {
+                var user = _context.Users
+            .Where(u => u.Id == Convert.ToInt32(Id) && u.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
             .Select(u => new
             {
                 u.Name,
@@ -41,56 +49,61 @@ namespace PgManagerApp.Controllers
             })
             .FirstOrDefault();
 
-            if (user == null)
-            {
-                return null; // Handle user not found
-            }
-
-            var transactions = _context.Transactions
-                .Where(t => t.UserId == Convert.ToInt32(Id))
-                .Select(t => new
+                if (user == null)
                 {
-                    t.RoomId,
-                    PaidAmount = t.AmountPaid.ToString(),  // Format as string
-                    ChargeAmount = t.ChargeAmount.ToString(),  // Format as string
-                    StartDate = t.StartDate.ToString("yyyy-MM-dd"),  // Format as string
-                    EndDate = t.EndDate.ToString("yyyy-MM-dd"),  // Format as string
-                    RoomNumber = _context.Rooms
-                        .Where(r => r.Id == t.RoomId)
-                        .Select(r => r.RoomNumber)
-                        .FirstOrDefault()
-                })
-                .ToList();
+                    return null; // Handle user not found
+                }
 
-            var totalChargeAmount = transactions.Sum(t => decimal.Parse(t.ChargeAmount));
-            var totalPaidAmount = transactions.Sum(t => decimal.Parse(t.PaidAmount));
+                var transactions = _context.Transactions
+                    .Where(t => t.UserId == Convert.ToInt32(Id) && t.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
+                    .Select(t => new
+                    {
+                        t.RoomId,
+                        PaidAmount = t.AmountPaid.ToString(),  // Format as string
+                        ChargeAmount = t.ChargeAmount.ToString(),  // Format as string
+                        StartDate = t.StartDate.ToString("yyyy-MM-dd"),  // Format as string
+                        EndDate = t.EndDate.ToString("yyyy-MM-dd"),  // Format as string
+                        RoomNumber = _context.Rooms
+                            .Where(r => r.Id == t.RoomId)
+                            .Select(r => r.RoomNumber)
+                            .FirstOrDefault()
+                    })
+                    .ToList();
 
-            var invoiceData = new InvoiceViewModel
-            {
-                UserName = user.Name,
-                MobileNumber = user.MobileNumber,
-                Email = user.Email,
-                RoomDetails = transactions.Select(t => new RoomDetail
+                var totalChargeAmount = transactions.Sum(t => decimal.Parse(t.ChargeAmount));
+                var totalPaidAmount = transactions.Sum(t => decimal.Parse(t.PaidAmount));
+
+                var invoiceData = new InvoiceViewModel
                 {
-                    RoomNumber = t.RoomNumber,
-                    ChargeAmount = t.ChargeAmount,
-                    PaidAmount = t.PaidAmount,
-                    StartDate = t.StartDate,
-                    EndDate = t.EndDate
-                }).ToList(),
-                TotalChargeAmount = totalChargeAmount.ToString(),
-                TotalPaidAmount = totalPaidAmount.ToString()
-            };
+                    UserName = user.Name,
+                    MobileNumber = user.MobileNumber,
+                    Email = user.Email,
+                    RoomDetails = transactions.Select(t => new RoomDetail
+                    {
+                        RoomNumber = t.RoomNumber,
+                        ChargeAmount = t.ChargeAmount,
+                        PaidAmount = t.PaidAmount,
+                        StartDate = t.StartDate,
+                        EndDate = t.EndDate
+                    }).ToList(),
+                    TotalChargeAmount = totalChargeAmount.ToString(),
+                    TotalPaidAmount = totalPaidAmount.ToString()
+                };
 
-            if(invoiceData!=null)
-            {
-                TempData["InvoiceData"] = JsonConvert.SerializeObject(invoiceData);
+                if (invoiceData != null)
+                {
+                    TempData["InvoiceData"] = JsonConvert.SerializeObject(invoiceData);
+                }
+                else
+                {
+                    TempData["Error"] = "No invoice data found!";
+                }
+                return RedirectToAction("Index");
             }
             else
             {
-                TempData["Error"] = "No invoice data found!";
+                return RedirectToAction("Login", "Auth");
             }
-            return RedirectToAction("Index");
         }
     }
 }

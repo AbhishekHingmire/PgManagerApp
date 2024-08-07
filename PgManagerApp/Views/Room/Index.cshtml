@@ -123,6 +123,7 @@
             </div>
             <div class="modal-body">
                 <form asp-action="AddOrEdit" method="post">
+                    <input type="hidden" asp-for="MasterId" />
                     <!-- Room Number/Name -->
                     <div class="form-group">
                         <label asp-for="RoomNumber" class="form-label"></label>

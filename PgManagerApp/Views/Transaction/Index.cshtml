@@ -155,6 +155,7 @@
                     </div>
                     <div class="modal-body">
                     <form asp-action="AddOrEdit" method="post">
+                        <input type="hidden" asp-for="MasterId" />
                         <input asp-for="Id" class="form-control" type="hidden">
                         <div class="form-group">
                             <label asp-for="UserId" class="control-label"></label>

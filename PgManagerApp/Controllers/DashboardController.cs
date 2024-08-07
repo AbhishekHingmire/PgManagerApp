@@ -19,61 +19,65 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            var model = new DashboardViewModel();
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            {
+                var model = new DashboardViewModel();
+               
 
-            var users = _context.Users.ToList();
+                var users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
+                
 
-            model.TotalUsers = users.Count().ToString();
+                model.TotalUsers = users.Count().ToString();
 
-            var transactions = _context.Transactions.ToList();
+                var transactions = _context.Transactions.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
 
-            // Count of users who paid
-            var paidUserCount = transactions
-                .Select(t => t.UserId)
-                .Distinct()
-                .Count();
+                // Count of users who paid
+                var paidUserCount = transactions
+                    .Select(t => t.UserId)
+                    .Distinct()
+                    .Count();
 
-            model.CountPaid = paidUserCount.ToString();
+                model.CountPaid = paidUserCount.ToString();
 
-            // Count of users who did not pay
-            var userIdsWhoPaid = transactions
-                .Select(t => t.UserId)
-                .Distinct()
-                .ToList();
+                // Count of users who did not pay
+                var userIdsWhoPaid = transactions
+                    .Select(t => t.UserId)
+                    .Distinct()
+                    .ToList();
 
-            var notPaidUserCount = users
-                .Count(u => !userIdsWhoPaid.Contains(u.Id));
+                var notPaidUserCount = users
+                    .Count(u => !userIdsWhoPaid.Contains(u.Id));
 
-            model.CountUnpaid = notPaidUserCount.ToString();
+                model.CountUnpaid = notPaidUserCount.ToString();
 
-            // Calculate total paid amount after converting string to decimal
-            var totalPaidAmount = transactions
-                .Select(t =>
-                {
-                    // Try to parse the AmountPaid, defaulting to 0 if parsing fails
-                    decimal.TryParse(t.AmountPaid, out var amountPaid);
-                    return amountPaid;
-                })
-                .Sum();
+                // Calculate total paid amount after converting string to decimal
+                var totalPaidAmount = transactions
+                    .Select(t =>
+                    {
+                        // Try to parse the AmountPaid, defaulting to 0 if parsing fails
+                        decimal.TryParse(t.AmountPaid, out var amountPaid);
+                        return amountPaid;
+                    })
+                    .Sum();
 
-            var totalRoomCharge = transactions
-                .Select(t =>
-                {
-                    // Try to parse the AmountPaid, defaulting to 0 if parsing fails
-                    decimal.TryParse(t.ChargeAmount, out var amountPaid);
-                    return amountPaid;
-                })
-                .Sum();
+                var totalRoomCharge = transactions
+                    .Select(t =>
+                    {
+                        // Try to parse the AmountPaid, defaulting to 0 if parsing fails
+                        decimal.TryParse(t.ChargeAmount, out var amountPaid);
+                        return amountPaid;
+                    })
+                    .Sum();
 
-            var totalNotPaidAmount = totalRoomCharge - totalPaidAmount;
+                var totalNotPaidAmount = totalRoomCharge - totalPaidAmount;
 
-            model.TotalPendingAmount = totalNotPaidAmount.ToString();
+                model.TotalPendingAmount = totalNotPaidAmount.ToString();
 
-            model.TotalAmount = totalPaidAmount.ToString();
+                model.TotalAmount = totalPaidAmount.ToString();
 
 
-            //CHartData
-            var daysOfWeek = new List<DayOfWeek>
+                //CHartData
+                var daysOfWeek = new List<DayOfWeek>
     {
         DayOfWeek.Sunday,
         DayOfWeek.Monday,
@@ -84,25 +88,30 @@ namespace PgManagerApp.Controllers
         DayOfWeek.Saturday
     };
 
-            var weeklyData = transactions
-                .GroupBy(t => t.StartDate.DayOfWeek)
-                .Select(g => new
+                var weeklyData = transactions
+                    .GroupBy(t => t.StartDate.DayOfWeek)
+                    .Select(g => new
+                    {
+                        Day = g.Key,
+                        Count = g.Count()
+                    })
+                    .ToDictionary(x => x.Day, x => x.Count); // Convert to dictionary for easy lookup
+
+                var dataPoints = daysOfWeek.Select(day => new
                 {
-                    Day = g.Key,
-                    Count = g.Count()
-                })
-                .ToDictionary(x => x.Day, x => x.Count); // Convert to dictionary for easy lookup
+                    label = day.ToString(),
+                    y = weeklyData.ContainsKey(day) ? weeklyData[day] : 0
+                }).ToList();
 
-            var dataPoints = daysOfWeek.Select(day => new
+                ViewBag.DataPoints = JsonSerializer.Serialize(dataPoints);
+                ViewBag.UserCounts = weeklyData;
+
+                return View(model);
+            }
+            else
             {
-                label = day.ToString(),
-                y = weeklyData.ContainsKey(day) ? weeklyData[day] : 0
-            }).ToList();
-
-            ViewBag.DataPoints = JsonSerializer.Serialize(dataPoints);
-            ViewBag.UserCounts = weeklyData;
-
-            return View(model);
+                return RedirectToAction("Login","Auth");
+            }
         }
 
         public IActionResult Privacy()

@@ -76,5 +76,6 @@ namespace PgManagerApp.Models
         public bool ViewOnly { get; set; }
         [NotMapped]
         public List<UserRegistration>? Users { get; set; }
+        public int? MasterId { get; set; }
     }
 }
