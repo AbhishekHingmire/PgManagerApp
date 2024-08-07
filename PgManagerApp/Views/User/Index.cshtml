@@ -27,6 +27,17 @@
             .scrollable-container::-webkit-scrollbar-thumb:hover {
                 background-color: #0056b3;
             }
+
+    .btn-container {
+        display: flex;
+        flex-wrap: nowrap; /* Prevent wrapping to the next line */
+        gap: 0.5rem; /* Space between buttons */
+    }
+
+        .btn-container form {
+            margin: 0; /* Remove default margins */
+        }
+
 </style>
 <!-- Begin Page Content -->
 <div class="container-fluid mb-4">
@@ -300,15 +311,11 @@
                                     </td>
                                     <td class="text-left">
                                         <div class="d-flex align-items-center justify-content-left">
-                                            
-                                                <p class="m-1">+91 @data.MobileNumber</p>
-                                         
+                                            <p class="m-1">+91 @data.MobileNumber</p>
                                         </div>
                                     </td>
                                     <td class="text-left">
-                                        <!-- Toggle Switch for Pending Payment -->
-                                        
-                                        @if(data.PendingAmount != "0.00")
+                                        @if (data.PendingAmount != "0.00")
                                         {
                                             <div class="text-danger m-1">
                                                 ₹ @data.PendingAmount
@@ -320,35 +327,33 @@
                                                 No-Pending
                                             </div>
                                         }
-
-                                            
                                     </td>
                                     <td class="text-left">
-                                        <!-- View Button Form -->
-                                        <form asp-action="AddOrEdit" method="post" class="d-inline">
-                                            <input type="hidden" name="Id" value="@data.Id" />
-                                            <input type="hidden" name="ViewOnly" value="true" />
-                                            <button type="submit" class="btn bg-light text-primary btn-sm m-1">
-                                                <i class="fas fa-eye"></i>
-                                                View
-                                            </button>
-                                        </form>
-                                        <form asp-action="AddOrEdit" method="post" class="d-inline">
-                                            <input type="hidden" name="Id" value="@data.Id" />
-                                            <button type="submit" class="btn bg-light text-info btn-sm m-1">
-                                                <i class="fas fa-edit"></i>
-                                                Update
-                                            </button>
-                                        </form>
-                                        <form asp-action="DeleteUser" method="post" class="d-inline">
-                                            <input type="hidden" name="Id" value="@data.Id" />
-                                            <button type="submit" class="btn bg-light text-danger btn-sm m-1" onclick="return confirm('Are you sure you want to delete this user?');">
-                                                <i class="fas fa-trash"></i>
-                                                Delete
-                                            </button>
-                                        </form>
+                                        <!-- Button Container -->
+                                        <div class="btn-container">
+                                            <form asp-action="AddOrEdit" method="post" class="d-inline">
+                                                <input type="hidden" name="Id" value="@data.Id" />
+                                                <input type="hidden" name="ViewOnly" value="true" />
+                                                <button type="submit" class="btn bg-light text-primary btn-sm m-1">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                            </form>
+                                            <form asp-action="AddOrEdit" method="post" class="d-inline">
+                                                <input type="hidden" name="Id" value="@data.Id" />
+                                                <button type="submit" class="btn bg-light text-info btn-sm m-1">
+                                                    <i class="fas fa-edit"></i> Update
+                                                </button>
+                                            </form>
+                                            <form asp-action="DeleteUser" method="post" class="d-inline">
+                                                <input type="hidden" name="Id" value="@data.Id" />
+                                                <button type="submit" class="btn bg-light text-danger btn-sm m-1" onclick="return confirm('Are you sure you want to delete this user?');">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
+
                             }
                         }
                         else
