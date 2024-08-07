@@ -16,7 +16,7 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var roomData = new RoomViewModel();
                 roomData.MasterId = HttpContext.Session.GetInt32("MasterUserId");
@@ -51,7 +51,7 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(RoomViewModel model)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var room = new RoomViewModel();
 
@@ -93,7 +93,7 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteRoom(int Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var room = new RoomViewModel();
                 room = _context.Rooms.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();

@@ -15,7 +15,7 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var model = new TransactionViewModel();
                 model.MasterId = HttpContext.Session.GetInt32("MasterUserId");
@@ -83,7 +83,7 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(TransactionViewModel model) 
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var tran = new TransactionViewModel();
 
@@ -130,7 +130,7 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteTransaction(int Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var transaction = new TransactionViewModel();
                 transaction = _context.Transactions.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();

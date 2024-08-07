@@ -15,7 +15,7 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
             .Select(u => new SelectListItem
@@ -37,7 +37,7 @@ namespace PgManagerApp.Controllers
         [HttpPost]
         public IActionResult GenerateInvoice(string Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var user = _context.Users
             .Where(u => u.Id == Convert.ToInt32(Id) && u.MasterId == HttpContext.Session.GetInt32("MasterUserId"))

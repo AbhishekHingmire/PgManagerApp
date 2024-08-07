@@ -15,7 +15,7 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var users = new UserRegistration();
                 users.MasterId = HttpContext.Session.GetInt32("MasterUserId");
@@ -77,7 +77,7 @@ namespace PgManagerApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(UserRegistration newUser)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var usr = new UserRegistration();
 

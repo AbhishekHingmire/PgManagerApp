@@ -13,7 +13,7 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetInt32("Username") != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var users = new UserRegistration();
                 users.Users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
