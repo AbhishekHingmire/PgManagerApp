@@ -52,5 +52,6 @@ namespace PgManagerApp.Models.Transaction
 
         [NotMapped]
         public List<SelectListItem>? Users { get; set; }
+        public int? MasterId { get; set; }
     }
 }

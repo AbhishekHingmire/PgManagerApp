@@ -16,81 +16,99 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            var roomData = new RoomViewModel();
-
-            if (TempData["RoomData"] != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
-                roomData = JsonConvert.DeserializeObject<RoomViewModel>(TempData["RoomData"].ToString()) ?? new RoomViewModel();
-            }
-            roomData.Rooms = _context.Rooms.ToList();
+                var roomData = new RoomViewModel();
+                roomData.MasterId = HttpContext.Session.GetInt32("MasterUserId");
 
-            foreach(var rooms in roomData.Rooms)
+                if (TempData["RoomData"] != null)
+                {
+                    roomData = JsonConvert.DeserializeObject<RoomViewModel>(TempData["RoomData"].ToString()) ?? new RoomViewModel();
+                }
+                roomData.Rooms = _context.Rooms.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
+
+                foreach (var rooms in roomData.Rooms)
+                {
+                    // LINQ query to count the number of users for the specified room
+                    int occupiedSpace = _context.Transactions
+                   .Where(t => t.RoomId == rooms.Id && t.MasterId == HttpContext.Session.GetInt32("MasterUserId")) // Filter transactions by the specific RoomId
+                   .Select(t => t.UserId) // Select the UserId from the transactions
+                   .Distinct() // Ensure unique users (in case of duplicate transactions)
+                   .Count(); // Count the number of unique users
+
+                    int remainingSpace = Convert.ToInt32(rooms.Capacity) - occupiedSpace;
+                    rooms.RemainingSpace = remainingSpace.ToString();
+                }
+                return View(roomData);
+            }
+            else
             {
-                // LINQ query to count the number of users for the specified room
-                int occupiedSpace = _context.Transactions
-               .Where(t => t.RoomId == rooms.Id) // Filter transactions by the specific RoomId
-               .Select(t => t.UserId) // Select the UserId from the transactions
-               .Distinct() // Ensure unique users (in case of duplicate transactions)
-               .Count(); // Count the number of unique users
-
-                int remainingSpace = Convert.ToInt32(rooms.Capacity) - occupiedSpace;
-                rooms.RemainingSpace = remainingSpace.ToString();
+                return RedirectToAction("Login", "Auth");
             }
-            
-
-           
-
-            return View(roomData);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(RoomViewModel model)
         {
-            var room = new RoomViewModel();
-
-            if (model.Id == 0)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
-                if (ModelState.IsValid)
+                var room = new RoomViewModel();
+
+                if (model.Id == 0)
                 {
-                    _context.Rooms.Add(model);
-                    _context.SaveChanges();
-                    TempData["Message"] = $"Room {model.RoomNumber} added succesfully";
+                    if (ModelState.IsValid)
+                    {
+                        _context.Rooms.Add(model);
+                        _context.SaveChanges();
+                        TempData["Message"] = $"Room {model.RoomNumber} added succesfully";
+                    }
                 }
+                else
+                {
+                    //Update if valid
+                    if (ModelState.IsValid)
+                    {
+                        _context.Rooms.Update(model);
+                        _context.SaveChanges();
+                        TempData["Message"] = $"Room {model.RoomNumber} updated succesfuly.";
+                    }
+                    //Populate popup for update if its IsEditable true
+                    else
+                    {
+                        room = _context.Rooms.Where(x => x.Id == model.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
+                        room.IsEditable = model.IsEditable;
+                        TempData["RoomData"] = JsonConvert.SerializeObject(room);
+                    }
+                }
+                return RedirectToAction("Index");
             }
             else
             {
-                //Update if valid
-                if (ModelState.IsValid)
-                {
-                    _context.Rooms.Update(model);
-                    _context.SaveChanges();
-                    TempData["Message"] = $"Room {model.RoomNumber} updated succesfuly.";
-                }
-                //Populate popup for update if its IsEditable true
-                else
-                {
-                    room = _context.Rooms.Where(x => x.Id == model.Id).FirstOrDefault();
-                    room.IsEditable = model.IsEditable;
-                    TempData["RoomData"] = JsonConvert.SerializeObject(room);
-                }
+                return RedirectToAction("Login", "Auth");
             }
-            return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteRoom(int Id)
         {
-            var room = new RoomViewModel();
-            room = _context.Rooms.Where(x => x.Id == Id).FirstOrDefault();
-            if (room != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
-                _context.Rooms.Remove(room);
-                _context.SaveChanges();
+                var room = new RoomViewModel();
+                room = _context.Rooms.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
+                if (room != null)
+                {
+                    _context.Rooms.Remove(room);
+                    _context.SaveChanges();
+                }
+                TempData["Message"] = $"Room {room.RoomNumber} succesfully deleted.";
+                return RedirectToAction("Index");
             }
-            TempData["Message"] = $"Room {room.RoomNumber} succesfully deleted.";
-            return RedirectToAction("Index");
+            else
+            {
+                return RedirectToAction("Login", "Auth");
+            }
         }
     }
 }

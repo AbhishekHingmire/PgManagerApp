@@ -37,5 +37,6 @@ namespace PgManagerApp.Models.Room
 
         [NotMapped]
         public List<RoomViewModel>? Rooms { get; set; }
+        public int? MasterId { get; set; }
     }
 }
