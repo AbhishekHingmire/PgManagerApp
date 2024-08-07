@@ -45,7 +45,7 @@ namespace PgManagerApp.Controllers
                 }).ToList();
 
                 //Same for rooms
-                var rooms = _context.Rooms.ToList();
+                var rooms = _context.Rooms.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
 
                 foreach (var room in rooms)
                 {
