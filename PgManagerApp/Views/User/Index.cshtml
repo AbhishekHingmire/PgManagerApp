@@ -102,7 +102,7 @@
                                     <input asp-for="IdentityNumber" id="identityNumber" class="form-control" required>
                                     <span class="text-danger custom-validation"></span>
                                 </div>
-                                    <button type="submit" onClick="OnClickSubmit()" class="btn btn-primary btn-sm"><i class="fa fa-save"></i>Submit</button>
+                                    <button type="submit" onClick="OnClickSubmit()" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Submit</button>
                             </form>
                         </div>
                     </div>
@@ -211,7 +211,19 @@
                         <!--Add user form-->
                     <form asp-action="AddOrEdit" method="post" onsubmit="return disableSubmitButton(this);">
                         <input type="hidden"asp-for="MasterId" />
-
+                        @{
+                            Model.Address = "";
+                            Model.Email = "";
+                            Model.CreatedDate = DateTime.Now;
+                            Model.Designation = "";
+                            Model.MobileNumber = "";
+                            Model.RoomNumber = "";
+                            Model.Address = "";
+                            Model.IdentityNumber = "";
+                            Model.IdentityType = "";
+                            Model.Name = "";
+                            Model.Email = "";
+                        }
                             <div class="mb-3">
                                 <label class="form-label">Name*</label>
                                 <input asp-for="Name" class="form-control" required>
