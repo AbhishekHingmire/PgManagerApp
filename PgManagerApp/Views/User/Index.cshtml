@@ -341,9 +341,10 @@
                                         @if (data.PendingAmount != "0.00")
                                         {
                                             <div class="text-danger m-1">
-                                                ₹ @data.PendingAmount
+                                                ₹ @decimal.Parse(data.PendingAmount).ToString("0")
                                             </div>
                                         }
+
                                         else
                                         {
                                             <div class="text-success m-1">

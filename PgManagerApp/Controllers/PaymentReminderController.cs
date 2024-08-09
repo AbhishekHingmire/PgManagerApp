@@ -54,6 +54,7 @@ namespace PgManagerApp.Controllers
 
             if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
+                _cache.Remove("PendingCounter");
                 int pendingCount = 0;
                 var users = new UserRegistration();
                 users.Users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
