@@ -40,7 +40,7 @@
 
                 <!-- Form -->
                 <div class="col-12 col-md-8">
-                    <form asp-action="UpdateMaster" class="p-3" method="post" onsubmit="return disableSubmitButton(this);">
+                    <form asp-action="UpdateMaster" class="p-3" method="post" onsubmit="return disableSubmitButton(this);" novalidate>
                         <input type="hidden" asp-for="Id" />
 
                         <div class="form-group">
@@ -77,4 +77,27 @@
         form.querySelector('button[type="submit"]').disabled = true;
         return true;
     }
+
+    function checkFormValidity() {
+        // Loop through all forms on the page
+        Array.from(document.forms).forEach(function (form) {
+            // Get the submit button associated with the form
+            var submitButton = form.querySelector('button[type="submit"]');
+
+            // Check if the form is valid
+            if (form.checkValidity()) {
+                submitButton.disabled = false; // Enable the submit button
+            } else {
+                submitButton.disabled = true; // Disable the submit button
+            }
+        });
+    }
+
+    // Add event listeners to form inputs to check validity on input
+    document.querySelectorAll('input, select, textarea').forEach(function (element) {
+        element.addEventListener('input', checkFormValidity);
+    });
+
+    // Initial check when the page loads
+    checkFormValidity();
 </script>

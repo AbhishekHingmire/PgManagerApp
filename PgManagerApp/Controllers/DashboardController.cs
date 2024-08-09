@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using PgManagerApp.Models;
 using System.Diagnostics;
 using System.Globalization;
@@ -22,10 +23,7 @@ namespace PgManagerApp.Controllers
             if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var model = new DashboardViewModel();
-               
-
                 var users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
-                
 
                 model.TotalUsers = users.Count().ToString();
 

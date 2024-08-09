@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PgManagerApp.Models;
+using PgManagerApp.Models.Transaction;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PgManagerApp.Controllers
@@ -65,11 +66,19 @@ namespace PgManagerApp.Controllers
             if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 var userDetails = new UserRegistration();
+                var transDetails = new TransactionViewModel();
+
                 userDetails = _context.Users.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
+                transDetails = _context.Transactions.Where(x => x.UserId == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
                 if (userDetails != null)
                 {
                     _context.Users.Remove(userDetails);
+                    _context.Transactions.Remove(transDetails);
                     _context.SaveChanges();
+                }
+                else
+                {
+                    TempData["Error"] = "Something went wrong!";
                 }
                 TempData["Message"] = "User succesfully deleted.";
                 return RedirectToAction("Index");
