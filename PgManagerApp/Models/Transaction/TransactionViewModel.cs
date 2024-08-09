@@ -24,12 +24,12 @@ namespace PgManagerApp.Models.Transaction
         public int RoomId { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid charge amount.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid charge amount.")]
         [Display(Name = "Charge Amount*")]
         public string? ChargeAmount { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid amount paid.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid amount paid.")]
         [Display(Name = "Amount Paid*")]
         public string? AmountPaid { get; set; }
 

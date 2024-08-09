@@ -10,6 +10,7 @@ namespace PgManagerApp.Models.Room
 
         [Required(ErrorMessage ="Enter room number/name")]
         [Display(Name = "Room Number/Name*")]
+        [Range(1, int.MaxValue, ErrorMessage = "The value must be a valid.")]
         public string RoomNumber { get; set; }
 
         [Required(ErrorMessage = "Enter room capacity")]
