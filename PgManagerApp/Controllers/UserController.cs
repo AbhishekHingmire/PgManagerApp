@@ -48,8 +48,8 @@ namespace PgManagerApp.Controllers
                     // Set the pending amount in the user object
                     user.PendingAmount = pendingAmount.ToString();
                 }
-
-
+                string formUrl = _context.FormUrls.Where(a => a.MasterId == HttpContext.Session.GetInt32("MasterUserId")).Select(a => a.Url).FirstOrDefault() ?? "";
+                users.FormUrl = formUrl;
 
                 return View(users);
             }
@@ -73,7 +73,10 @@ namespace PgManagerApp.Controllers
                 if (userDetails != null)
                 {
                     _context.Users.Remove(userDetails);
-                    _context.Transactions.Remove(transDetails);
+                    if (transDetails != null)
+                    {
+                        _context.Transactions.Remove(transDetails);
+                    }
                     _context.SaveChanges();
                 }
                 else
@@ -97,13 +100,38 @@ namespace PgManagerApp.Controllers
             {
                 var usr = new UserRegistration();
 
+                // Handle file upload
+                if (newUser.ProfilePicture != null && newUser.ProfilePicture.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles");
+
+                    // Ensure directory exists
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Add unique identifier to file name to prevent collisions
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(newUser.ProfilePicture.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Save the file to the server
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        newUser.ProfilePicture.CopyTo(stream);
+                    }
+
+                    // Set the image path in the model
+                    newUser.ProfilePicturePath = "/images/profiles/" + uniqueFileName;
+                }
+
                 if (newUser.Id == 0)
                 {
                     if (ModelState.IsValid)
                     {
                         _context.Users.Add(newUser);
                         _context.SaveChanges();
-                        TempData["Message"] = "User succesfully added.";
+                        TempData["Message"] = "User successfully added.";
                     }
                     else
                     {
@@ -116,7 +144,7 @@ namespace PgManagerApp.Controllers
                     {
                         _context.Users.Update(newUser);
                         _context.SaveChanges();
-                        TempData["Message"] = "User succesfully updated.";
+                        TempData["Message"] = "User successfully updated.";
                         return RedirectToAction("Index");
                     }
                     usr = _context.Users.Where(x => x.Id == newUser.Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
@@ -130,5 +158,7 @@ namespace PgManagerApp.Controllers
                 return RedirectToAction("Login", "Auth");
             }
         }
+
+
     }
 }

@@ -6,8 +6,9 @@
         <a href="#" class="d-sm-inline-block btn btn-sm m-1 btn-primary shadow-sm" data-toggle="modal"
            data-target="#addTransactionModal"><i class="fas fa-plus fa-md text-white-50"></i> Add Room</a>
     </div>
-        @{
-            if (TempData["Message"] != null)
+
+    @{
+        if (TempData["Message"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="fas fa-check fa-md text-success"></i>
@@ -27,10 +28,31 @@
                 </button>
             </div>
         }
-        }
+    }
 
+    <div class="row pb-3 mb-4">
+        <!-- Total Rooms Section -->
+        <div class="col-xl-6 col-lg-6 col-md-6 col-12 mb-3">
+            <div class="card bg-primary text-white shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Rooms</h5>
+                    <p class="card-text">@Model.TotalRooms</p>
+                </div>
+            </div>
+        </div>
 
-            <div class="row pb-3 mb-4">
+        <!-- Available Rooms Section -->
+        <div class="col-xl-6 col-lg-6 col-md-6 col-12 mb-3">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Available Rooms</h5>
+                    <p class="card-text">@Model.AvailableRooms</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pb-3 mb-4">
         @if (Model?.Rooms?.Count > 0)
         {
             @foreach (var room in Model.Rooms)
@@ -106,10 +128,10 @@
             }
         }
         else
-            {
-                <strong>No data found!</strong>
-            }
-            </div>
+        {
+            <strong>No data found!</strong>
+        }
+    </div>
 </div>
 
 

@@ -87,7 +87,7 @@ namespace PgManagerApp.Controllers
     };
 
                 var weeklyData = transactions
-                    .GroupBy(t => t.StartDate.DayOfWeek)
+                    .GroupBy(t => t.InitDate.DayOfWeek)
                     .Select(g => new
                     {
                         Day = g.Key,

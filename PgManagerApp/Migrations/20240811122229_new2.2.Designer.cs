@@ -12,8 +12,8 @@ using PgManagerApp.Models;
 namespace PgManagerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240805124023_Init2.4")]
-    partial class Init24
+    [Migration("20240811122229_new2.2")]
+    partial class new22
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,52 @@ namespace PgManagerApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("PgManagerApp.Models.FormUrl", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MasterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FormUrls");
+                });
+
+            modelBuilder.Entity("PgManagerApp.Models.MasterUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MasterUser");
+                });
 
             modelBuilder.Entity("PgManagerApp.Models.Room.RoomViewModel", b =>
                 {
@@ -48,6 +94,9 @@ namespace PgManagerApp.Migrations
 
                     b.Property<bool>("HasWiFi")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("MasterId")
+                        .HasColumnType("int");
 
                     b.Property<string>("RoomNumber")
                         .IsRequired()
@@ -77,6 +126,12 @@ namespace PgManagerApp.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MasterId")
+                        .HasColumnType("int");
+
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
@@ -89,6 +144,58 @@ namespace PgManagerApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("PgManagerApp.Models.UserApproval", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Designation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MasterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserApproval");
                 });
 
             modelBuilder.Entity("PgManagerApp.Models.UserRegistration", b =>
@@ -120,6 +227,12 @@ namespace PgManagerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MasterId")
+                        .HasColumnType("int");
+
                     b.Property<string>("MobileNumber")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -127,6 +240,9 @@ namespace PgManagerApp.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicturePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

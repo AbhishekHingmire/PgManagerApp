@@ -26,7 +26,8 @@ namespace PgManagerApp.Controllers
                     roomData = JsonConvert.DeserializeObject<RoomViewModel>(TempData["RoomData"].ToString()) ?? new RoomViewModel();
                 }
                 roomData.Rooms = _context.Rooms.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
-
+                roomData.TotalRooms = roomData.Rooms.Count().ToString() ?? "0";
+                int counter = 0;
                 foreach (var rooms in roomData.Rooms)
                 {
                     // LINQ query to count the number of users for the specified room
@@ -38,7 +39,12 @@ namespace PgManagerApp.Controllers
 
                     int remainingSpace = Convert.ToInt32(rooms.Capacity) - occupiedSpace;
                     rooms.RemainingSpace = remainingSpace.ToString();
+                    if(rooms.RemainingSpace != "0")
+                    {
+                        counter++;
+                    }
                 }
+                roomData.AvailableRooms = counter.ToString() ?? "0";
                 return View(roomData);
             }
             else

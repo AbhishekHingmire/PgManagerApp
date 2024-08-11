@@ -22,6 +22,26 @@ namespace PgManagerApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PgManagerApp.Models.FormUrl", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MasterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FormUrls");
+                });
+
             modelBuilder.Entity("PgManagerApp.Models.MasterUser", b =>
                 {
                     b.Property<int>("Id")
@@ -103,6 +123,9 @@ namespace PgManagerApp.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("MasterId")
                         .HasColumnType("int");
 
@@ -120,7 +143,7 @@ namespace PgManagerApp.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("PgManagerApp.Models.UserRegistration", b =>
+            modelBuilder.Entity("PgManagerApp.Models.UserApproval", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -149,6 +172,9 @@ namespace PgManagerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("MasterId")
                         .HasColumnType("int");
 
@@ -159,6 +185,67 @@ namespace PgManagerApp.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserApproval");
+                });
+
+            modelBuilder.Entity("PgManagerApp.Models.UserRegistration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ApprovedUser")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ApprovedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Designation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MasterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MobileNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicturePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

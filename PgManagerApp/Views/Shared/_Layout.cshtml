@@ -14,6 +14,11 @@
     <meta name="author" content="">
 
     <title>PG Manager - Dashboard</title>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom fonts for this template-->
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -57,6 +62,22 @@
                 <a class="nav-link collapsed" href="~/User">
                     <i class="fas fa-user"></i>
                     <span>Users</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "UsersApproval" ? "active" : "collapsed")">
+                <a class="nav-link collapsed" href="~/UsersApproval">
+                    <i class="fas fa-check"></i>
+                    <span> User Approvals</span>
+
+                    @{
+                        int? pendingUserApprovals;
+                        if (Cache.TryGetValue("approvalCount", out pendingUserApprovals) && pendingUserApprovals > 0)
+                        {
+                            <span class="badge bg-danger text-white ml-1" style="font-size:0.7rem;">@pendingUserApprovals</span>
+                        }
+                    }
                 </a>
             </li>
 
@@ -274,5 +295,23 @@
         });
     }
     
-        updatePendingCount();
+
+
+    function updatePendingUserRequestCount() {
+        $.ajax({
+            url: '@Url.Action("UserApprovalCountService", "UsersApproval")',
+            type: 'GET',
+            success: function (count) {
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    updatePendingCount();
+    updatePendingUserRequestCount();
+
+    
 </script>
