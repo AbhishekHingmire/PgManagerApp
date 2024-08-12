@@ -16,69 +16,90 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            var user = new UserApproval();
-            user.UserApprovalList = _context.UserApproval.ToList();
-            return View(user);
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
+            {
+                var user = new UserApproval();
+                user.UserApprovalList = _context.UserApproval.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
+                return View(user);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Auth");
+            }
         }
 
         public IActionResult ApproveRequest(int Id)
         {
-            _cache.Remove("approvalCount");
-            var reg = new UserRegistration();
-            var user = _context.UserApproval.Where(x => x.Id == Id).FirstOrDefault() ?? new UserApproval();
-            var checkExistingUser = _context.Users.Where(x => x.IdentityNumber == user.IdentityNumber).FirstOrDefault();
-            if(user != null)
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
-                if(checkExistingUser == null)
+                _cache.Remove("approvalCount");
+                var reg = new UserRegistration();
+                var user = _context.UserApproval.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault() ?? new UserApproval();
+                var checkExistingUser = _context.Users.Where(x => x.IdentityNumber == user.IdentityNumber).FirstOrDefault();
+                if (user != null)
                 {
-                    reg = new UserRegistration()
+                    if (checkExistingUser == null)
                     {
-                        Id = 0,
-                        MobileNumber = user.MobileNumber,
-                        MasterId = user.MasterId,
-                        InitDate = DateTime.Now,
-                        IdentityType = user.IdentityType,
-                        IdentityNumber = user.IdentityNumber,
-                        FormUrl = user.FormUrl,
-                        Name = user.Name,
-                        Designation = user.Designation,
-                        CreatedDate = user.CreatedDate,
-                        Address = user.Address,
-                        Email = user.Email,
-                        PendingAmount = user.PendingAmount,
-                        ProfilePicture = user.ProfilePicture,
-                        ProfilePicturePath = user.ProfilePicturePath,
-                        RoomNumber = user.RoomNumber,
-                        ApprovedUser = true,
-                        ApprovedUserId = user.Id,
-                    };
-                    _context.Users.Add(reg);
-                    _context.UserApproval.Remove(user);
-                    _context.SaveChanges();
-                    TempData["Message"] = "Request approved succesfully.";
+                        reg = new UserRegistration()
+                        {
+                            Id = 0,
+                            MobileNumber = user.MobileNumber,
+                            MasterId = user.MasterId,
+                            InitDate = DateTime.Now,
+                            IdentityType = user.IdentityType,
+                            IdentityNumber = user.IdentityNumber,
+                            FormUrl = user.FormUrl,
+                            Name = user.Name,
+                            Designation = user.Designation,
+                            CreatedDate = user.CreatedDate,
+                            Address = user.Address,
+                            Email = user.Email,
+                            PendingAmount = user.PendingAmount,
+                            ProfilePicture = user.ProfilePicture,
+                            ProfilePicturePath = user.ProfilePicturePath,
+                            RoomNumber = user.RoomNumber,
+                            ApprovedUser = true,
+                            ApprovedUserId = user.Id,
+                        };
+                        _context.Users.Add(reg);
+                        _context.UserApproval.Remove(user);
+                        _context.SaveChanges();
+                        TempData["Message"] = "Request approved succesfully.";
+                    }
+                    else
+                    {
+                        TempData["Error"] = "This user alredy exists in database!";
+                    }
                 }
-                else
-                {
-                    TempData["Error"] = "This user alredy exists in database!";
-                }
-            }
-            return RedirectToAction("Index");
-        }
-        public IActionResult DeleteRequest(int Id)
-        {
-            var user = _context.UserApproval.Where(x => x.Id == Id).FirstOrDefault() ?? new UserApproval();
-            if (user != null)
-            {
-                _context.UserApproval.Remove(user);
-                _context.SaveChanges();
-                TempData["Message"] = "Request deleted succesfully!";
+                return RedirectToAction("Index");
             }
             else
             {
-                TempData["Error"] = "Something went wrong!";
+                return RedirectToAction("Login", "Auth");
             }
+        }
+        public IActionResult DeleteRequest(int Id)
+        {
+            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
+            {
+                var user = _context.UserApproval.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault() ?? new UserApproval();
+                if (user != null)
+                {
+                    _context.UserApproval.Remove(user);
+                    _context.SaveChanges();
+                    TempData["Message"] = "Request deleted succesfully!";
+                }
+                else
+                {
+                    TempData["Error"] = "Something went wrong!";
+                }
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Auth");
+            }
         }
 
         public void UserApprovalCountService()
@@ -87,7 +108,7 @@ namespace PgManagerApp.Controllers
             if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
             {
                 _cache.Remove("approvalCount");
-                int approvalCount = _context.UserApproval.ToList().Count();
+                int approvalCount = _context.UserApproval.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList().Count();
                 _cache.Set("approvalCount", approvalCount);
             }
         }

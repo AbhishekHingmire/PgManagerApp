@@ -33,10 +33,6 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4"><strong>User Form</strong></h1>
                                     </div>
-                                    @if (TempData["Message"] != null)
-                                    {
-                                        <h6 class="m-3"><strong class="text-success">@TempData["Message"]</strong></h6>
-                                    }
                                     <form asp-controller="Form" asp-action="SubmitForm" method="post" enctype="multipart/form-data" onsubmit="return disableSubmitButton(this);" novalidate>
                                         <input type="hidden" asp-for="MasterId" />
 

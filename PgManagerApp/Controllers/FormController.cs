@@ -102,7 +102,7 @@ namespace PgManagerApp.Controllers
             }
             else
             {
-                TempData["Error"] = "Something went wrong, please try again later!";
+                TempData["OuterFormError"] = "Something went wrong, please try again later!";
             }
 
             return View("Index");
