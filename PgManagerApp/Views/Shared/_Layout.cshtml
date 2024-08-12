@@ -70,9 +70,9 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "UsersApproval" ? "active" : "collapsed")">
-                <a class="nav-link collapsed" href="~/UsersApproval">
-                    <i class="fas fa-check"></i>
-                    <span> User Approvals</span>
+                <a class="nav-link collapsed d-flex align-items-center" href="~/UsersApproval">
+                    <i class="fas fa-check mr-2"></i>
+                    <span>User Approvals</span>
 
                     @{
                         int? pendingUserApprovals;
@@ -104,7 +104,7 @@
             <li class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "PaymentReminder" ? "active" : "collapsed")">
                 <a class="nav-link collapsed d-flex align-items-center" href="~/PaymentReminder">
                     <i class="fas fa-bell mr-2"></i>
-                    <span>Payment Reminders</span>
+                    <span>Pending Payment</span>
 
                     @{
                         int? count;

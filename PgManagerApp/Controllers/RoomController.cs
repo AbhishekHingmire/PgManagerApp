@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using PgManagerApp.Models;
 using PgManagerApp.Models.Room;
-using PgManagerApp.Models.Transaction;
 
 namespace PgManagerApp.Controllers
 {

@@ -35,7 +35,7 @@ namespace PgManagerApp.Controllers
                 _cache.Remove("approvalCount");
                 var reg = new UserRegistration();
                 var user = _context.UserApproval.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault() ?? new UserApproval();
-                var checkExistingUser = _context.Users.Where(x => x.IdentityNumber == user.IdentityNumber).FirstOrDefault();
+                var checkExistingUser = _context.Users.Where(x => x.IdentityNumber == user.IdentityNumber && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
                 if (user != null)
                 {
                     if (checkExistingUser == null)

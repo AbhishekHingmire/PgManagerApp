@@ -1,4 +1,5 @@
 ﻿using PgManagerApp.Models.Room;
+using PgManagerApp.Models.Transaction;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace PgManagerApp.Models
@@ -41,6 +42,8 @@ namespace PgManagerApp.Models
         public string? CountUnpaid { get; set; }
         public string? TotalAmount { get; set; }
         public string? TotalPendingAmount { get; set; }
+        public string? AvailableRooms { get; set; }
+        public List<UserRegistration>? UsersSummary { get; set; }
     }
 
     public class UserRegistration
@@ -53,6 +56,12 @@ namespace PgManagerApp.Models
 
         [NotMapped]
         public string? PendingAmount { get; set; }
+
+        [NotMapped]
+        public string? PaidAmount { get; set; }
+
+        [NotMapped]
+        public string? ChargeAmount { get; set; }
 
         public string? Email { get; set; }
 
@@ -97,6 +106,15 @@ namespace PgManagerApp.Models
         public int? MasterId { get; set; }
         public int? ApprovedUserId { get; set; }
         public bool? ApprovedUser { get; set; } = false;
+
+        [NotMapped]
+        public List<TransactionViewModel>? Transactions { get; set; }
+
+        [NotMapped]
+        public string? RoomsCount { get; set; }
+
+        [NotMapped]
+        public List<string>? RoomNumbers { get; set; }
     }
 
 
