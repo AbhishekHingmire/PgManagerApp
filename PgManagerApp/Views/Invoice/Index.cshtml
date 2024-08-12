@@ -28,6 +28,20 @@
     }
 </style>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Bootstrap CSS (if needed) -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- jQuery (required for Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Bootstrap JS (if needed) -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <div class="container-fluid mb-4">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800 m-1">Invoice Manager</h1>
@@ -44,7 +58,7 @@
             <div class="form-group row">
                 <div class="col-md-8 m-2">
                     <select id="userSelect" name="Id" class="form-control" required>
-                        <option value="">Select a User</option>
+                        <option value="" class="p-2">Select a User</option>
                         @foreach (var user in (List<SelectListItem>)ViewBag.Users)
                         {
                             <option value="@user.Value">@user.Text</option>
@@ -59,10 +73,8 @@
             </div>
         </form>
 
-
         @if (invoiceData != null)
         {
-
             <div class="card mt-2">
                 <div class="card-header">
                     <h6>Invoice for @invoiceData.UserName</h6>
@@ -113,14 +125,14 @@
 
             <a href="#" id="downloadPdfBtn" class="d-sm-inline-block btn btn-sm m-1 btn-primary shadow-sm mt-2"
                data-target="#exampleModal"><i class="fas fa-download fa-md text-white-50"></i> Download Invoice</a>
-
         }
         else
         {
-            
             <strong>No data available.</strong>
         }
     </div>
+
+
 
 </div>
 
@@ -129,6 +141,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.18/jspdf.plugin.autotable.min.js"></script>
 
 <script>
+    // Initialize Select2 on the dropdown
+    $('#userSelect').select2({
+        placeholder: "Select a User",
+        allowClear: true
+    });
     // Convert C# object to JavaScript object
     var invoiceData = @Html.Raw(JsonConvert.SerializeObject(invoiceData));
 
