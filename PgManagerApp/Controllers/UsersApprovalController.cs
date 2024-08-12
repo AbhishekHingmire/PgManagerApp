@@ -45,7 +45,7 @@ namespace PgManagerApp.Controllers
                             Id = 0,
                             MobileNumber = user.MobileNumber,
                             MasterId = user.MasterId,
-                            InitDate = DateTime.Now,
+                            InitDate = DateTime.Today,
                             IdentityType = user.IdentityType,
                             IdentityNumber = user.IdentityNumber,
                             FormUrl = user.FormUrl,

@@ -53,7 +53,6 @@ namespace PgManagerApp.Controllers
                     int occupiedSpace = _context.Transactions
                    .Where(t => t.RoomId == room.Id && t.MasterId == HttpContext.Session.GetInt32("MasterUserId")) // Filter transactions by the specific RoomId
                    .Select(t => t.UserId) // Select the UserId from the transactions
-                   .Distinct() // Ensure unique users (in case of duplicate transactions)
                    .Count(); // Count the number of unique users
 
                     int remainingSpace = Convert.ToInt32(room.Capacity) - occupiedSpace;
