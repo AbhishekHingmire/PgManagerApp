@@ -64,12 +64,12 @@ namespace PgManagerApp.Models
         [NotMapped]
         public string? ChargeAmount { get; set; }
 
-        public string? Email { get; set; }
+        /*public string? Email { get; set; }
 
         [StringLength(10)]
         [Required(ErrorMessage = "Mobile number is required.")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Enter valid mobile number.")]
-        public string? MobileNumber { get; set; } = "1234567890";
+        public string? MobileNumber { get; set; } = "1234567890";*/
 
         [NotMapped]
         public string? RoomNumber { get; set; }
@@ -130,12 +130,12 @@ namespace PgManagerApp.Models
         [NotMapped]
         public string? PendingAmount { get; set; }
 
-        public string? Email { get; set; }
+        /*public string? Email { get; set; }
 
         [StringLength(10)]
         [Required(ErrorMessage = "Mobile number is required.")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Enter valid mobile number.")]
-        public string? MobileNumber { get; set; } = "1234567890";
+        public string? MobileNumber { get; set; } = "1234567890";*/
 
         [NotMapped]
         public string? RoomNumber { get; set; }

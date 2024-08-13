@@ -37,8 +37,8 @@ namespace PgManagerApp.Controllers
             .Select(u => new
             {
                 u.Name,
-                u.MobileNumber,
-                u.Email
+             // u.MobileNumber,
+             // u.Email
             })
             .FirstOrDefault();
 
@@ -69,8 +69,8 @@ namespace PgManagerApp.Controllers
                 var invoiceData = new InvoiceViewModel
                 {
                     UserName = user.Name,
-                    MobileNumber = user.MobileNumber,
-                    Email = user.Email,
+                 // MobileNumber = user.MobileNumber,
+                 // Email = user.Email,
                     RoomDetails = transactions.Select(t => new RoomDetail
                     {
                         RoomNumber = t.RoomNumber,

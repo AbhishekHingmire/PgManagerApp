@@ -68,7 +68,7 @@
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
 
-                                <div class="mb-3">
+                                @*<div class="mb-3">
                                     <label class="form-label">Email</label>
                                     <input asp-for="Email" class="form-control" type="email">
                                     <span asp-validation-for="Email" class="text-danger"></span>
@@ -78,7 +78,7 @@
                                     <label class="form-label">Mobile*</label>
                                     <input asp-for="MobileNumber" class="form-control" type="tel" required>
                                     <span asp-validation-for="MobileNumber" class="text-danger"></span>
-                                </div>
+                                </div>*@
 
                                 <div class="mb-3">
                                     <label class="form-label">Address*</label>
@@ -158,14 +158,14 @@
                                 <div class="table-responsive">
                                     <table class="table table-borderless mb-0">
                                         <tbody>
-                                            <tr>
+                                           @* <tr>
                                                 <th scope="row" class="font-weight-bold">Email:</th>
                                                 <td>@Model.Email</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row" class="font-weight-bold">Mobile:</th>
                                                 <td>@Model.MobileNumber</td>
-                                            </tr>
+                                            </tr>*@
                                             <tr>
                                                 <th scope="row" class="font-weight-bold">Address:</th>
                                                 <td>@Model.Address</td>
@@ -283,23 +283,22 @@
                         <input type="hidden" asp-for="MasterId" />
                         @{
                             Model.Address = "";
-                            Model.Email = "";
+                            //Model.Email = "";
                             Model.CreatedDate = DateTime.Now;
                             Model.Designation = "";
-                            Model.MobileNumber = "";
+                            //Model.MobileNumber = "";
                             Model.RoomNumber = "";
                             Model.Address = "";
                             Model.IdentityNumber = "";
                             Model.IdentityType = "";
                             Model.Name = "";
-                            Model.Email = "";
                         }
                         <div class="mb-3">
                             <label class="form-label">Name*</label>
                             <input asp-for="Name" class="form-control" required>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
-                        <div class="mb-3">
+                       @* <div class="mb-3">
                             <label class="form-label">Email</label>
                             <input asp-for="Email" class="form-control" type="email">
                             <span asp-validation-for="Email" class="text-danger"></span>
@@ -308,7 +307,7 @@
                             <label class="form-label">Mobile*</label>
                             <input asp-for="MobileNumber" class="form-control" type="tel" required>
                             <span asp-validation-for="MobileNumber" class="text-danger"></span>
-                        </div>
+                        </div> *@
                         <div class="mb-3">
                             <label class="form-label">Address*</label>
                             <textarea asp-for="Address" class="form-control" rows="3" required></textarea>
@@ -381,7 +380,7 @@
                 <thead class="thead bg-primary text-white" style="position: sticky; top: -1px; z-index: 1;">
                     <tr>
                         <th class="text-left">User</th>
-                        <th class="text-left">Mobile</th>
+                        @*<th class="text-left">Mobile</th>*@
                         <th class="text-left">Pending Payment</th>
                         <th class="text-left">Actions</th>
                     </tr>
@@ -403,11 +402,11 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-left">
+                                   @* <td class="text-left">
                                         <div class="d-flex align-items-center justify-content-left">
                                             <p class="m-1">+91 @data.MobileNumber</p>
                                         </div>
-                                    </td>
+                                    </td> *@
                                     <td class="text-left">
                                         @if (data.PendingAmount != "0.00")
                                         {

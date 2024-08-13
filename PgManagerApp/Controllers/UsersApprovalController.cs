@@ -36,7 +36,7 @@ namespace PgManagerApp.Controllers
                         reg = new UserRegistration()
                         {
                             Id = 0,
-                            MobileNumber = user.MobileNumber,
+                          //MobileNumber = user.MobileNumber,
                             MasterId = user.MasterId,
                             InitDate = DateTime.Today,
                             IdentityType = user.IdentityType,
@@ -46,7 +46,7 @@ namespace PgManagerApp.Controllers
                             Designation = user.Designation,
                             CreatedDate = user.CreatedDate,
                             Address = user.Address,
-                            Email = user.Email,
+                         // Email = user.Email,
                             PendingAmount = user.PendingAmount,
                             ProfilePicture = user.ProfilePicture,
                             ProfilePicturePath = user.ProfilePicturePath,

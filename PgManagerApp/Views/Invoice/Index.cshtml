@@ -81,8 +81,8 @@
                 </div>
                 <div class="card-body row">
                     <div class="col-xl-4 col-lg-4 col-md-3 col-12">
-                        <p><strong>Mobile Number:</strong> @invoiceData.MobileNumber</p>
-                        <p><strong>Email:</strong> @invoiceData.Email</p>
+                        @* <p><strong>Mobile Number:</strong> @invoiceData.MobileNumber</p>
+                        <p><strong>Email:</strong> @invoiceData.Email</p> *@
                         <p><strong>Total Charge Amount:</strong> ₹ @invoiceData.TotalChargeAmount</p>
                         <p><strong>Total Paid Amount:</strong> ₹ @invoiceData.TotalPaidAmount</p>
                     </div>
@@ -164,8 +164,8 @@
 
         // User Details Table
         var userDetails = [
-            { label: 'Mobile Number' , value: `+91 ${invoiceData.MobileNumber}` },
-            { label: 'Email', value: invoiceData.Email },
+           // { label: 'Mobile Number' , value: `+91 ${invoiceData.MobileNumber}` },
+           // { label: 'Email', value: invoiceData.Email },
             { label: 'Total Charge Amount', value: `Rs. ${invoiceData.TotalChargeAmount}` },
             { label: 'Total Paid Amount', value: `Rs. ${invoiceData.TotalPaidAmount}` }
         ];
