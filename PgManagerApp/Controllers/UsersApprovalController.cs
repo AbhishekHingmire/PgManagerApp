@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using PgManagerApp.Models;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class UsersApprovalController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,22 +18,13 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var user = new UserApproval();
                 user.UserApprovalList = _context.UserApproval.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
                 return View(user);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         public IActionResult ApproveRequest(int Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 _cache.Remove("approvalCount");
                 var reg = new UserRegistration();
                 var user = _context.UserApproval.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault() ?? new UserApproval();
@@ -72,16 +65,9 @@ namespace PgManagerApp.Controllers
                     }
                 }
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
         public IActionResult DeleteRequest(int Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var user = _context.UserApproval.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault() ?? new UserApproval();
                 if (user != null)
                 {
@@ -95,22 +81,13 @@ namespace PgManagerApp.Controllers
                 }
 
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         public void UserApprovalCountService()
         {
-
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 _cache.Remove("approvalCount");
                 int approvalCount = _context.UserApproval.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList().Count();
                 _cache.Set("approvalCount", approvalCount);
-            }
         }
     }
 }

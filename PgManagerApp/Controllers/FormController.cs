@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PgManagerApp.Models;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class FormController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -27,8 +29,6 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult GenerateFormLink()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 int masterId = HttpContext.Session.GetInt32("MasterUserId") ?? 0;
                 var url = _context.FormUrls.Where(a => a.MasterId == masterId).FirstOrDefault();
 
@@ -56,12 +56,7 @@ namespace PgManagerApp.Controllers
 
                 // Redirect to a view that shows the generated URL or any other desired page
                 return RedirectToAction("Index", "User");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
-
+           
         }
 
 

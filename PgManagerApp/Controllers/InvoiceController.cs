@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PgManagerApp.Models;
@@ -6,6 +7,7 @@ using PgManagerApp.Models.Room;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class InvoiceController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,8 +17,6 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
             .Select(u => new SelectListItem
             {
@@ -27,18 +27,11 @@ namespace PgManagerApp.Controllers
 
                 ViewBag.Users = users;
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
         
         [HttpPost]
         public IActionResult GenerateInvoice(string Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var user = _context.Users
             .Where(u => u.Id == Convert.ToInt32(Id) && u.MasterId == HttpContext.Session.GetInt32("MasterUserId"))
             .Select(u => new
@@ -99,11 +92,6 @@ namespace PgManagerApp.Controllers
                     TempData["Error"] = "No invoice data found!";
                 }
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
     }
 }

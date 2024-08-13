@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using PgManagerApp.Models;
@@ -8,6 +9,7 @@ using System.Text.Json;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
@@ -21,8 +23,6 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var model = new DashboardViewModel();
                 var users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
                 model.UsersSummary = users;
@@ -157,17 +157,9 @@ namespace PgManagerApp.Controllers
                 }
                 model.AvailableRooms = counter.ToString();
                 return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Login","Auth");
-            }
+           
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

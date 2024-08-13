@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using PgManagerApp.Models;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PgManagerApp.Controllers
 {
@@ -59,6 +63,18 @@ namespace PgManagerApp.Controllers
 
                 if (user != null)
                 {
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Name)
+                // Add more claims as needed
+            };
+
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+
+                    // Sign in the user
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
                     HttpContext.Session.SetInt32("MasterUserId", user.Id);
                     HttpContext.Session.SetString("Username", user.Name);
                     _cache.Set("Username", user.Name);
@@ -76,6 +92,7 @@ namespace PgManagerApp.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
 
@@ -89,6 +106,7 @@ namespace PgManagerApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult DeleteAccount()
         {

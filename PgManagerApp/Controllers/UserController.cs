@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PgManagerApp.Models;
 using PgManagerApp.Models.Transaction;
@@ -6,6 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,8 +18,6 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var users = new UserRegistration();
                 users.MasterId = HttpContext.Session.GetInt32("MasterUserId");
                 if (TempData["UserData"] != null)
@@ -52,19 +52,12 @@ namespace PgManagerApp.Controllers
                 users.FormUrl = formUrl;
 
                 return View(users);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteUser(int Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var userDetails = new UserRegistration();
                 var transDetails = new TransactionViewModel();
 
@@ -85,19 +78,12 @@ namespace PgManagerApp.Controllers
                 }
                 TempData["Message"] = "User succesfully deleted.";
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(UserRegistration newUser)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var usr = new UserRegistration();
 
                 // Handle file upload
@@ -152,13 +138,7 @@ namespace PgManagerApp.Controllers
                     TempData["UserData"] = JsonConvert.SerializeObject(usr);
                 }
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
-
 
     }
 }

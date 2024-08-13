@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using PgManagerApp.Models;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class PaymentReminderController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,8 +19,6 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var users = new UserRegistration();
                 users.Users = _context.Users.Where(x => x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).ToList();
 
@@ -42,18 +42,11 @@ namespace PgManagerApp.Controllers
                     user.PendingAmount = pendingAmount.ToString();
                 }
                 return View(users);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
+           
         }
 
         public void PendingCountService()
         {
-
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 _cache.Remove("PendingCounter");
                 int pendingCount = 0;
                 var users = new UserRegistration();
@@ -83,7 +76,6 @@ namespace PgManagerApp.Controllers
                 }
 
                 _cache.Set("PendingCounter", pendingCount);
-            }
         }
     }
 }

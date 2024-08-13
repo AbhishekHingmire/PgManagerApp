@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using PgManagerApp.Models;
 using System.Security.Cryptography;
@@ -6,6 +7,7 @@ using System.Text;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,8 +21,6 @@ namespace PgManagerApp.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var admin = new MasterUser();
 
                 admin = _context.MasterUser.Where(x => x.Id == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
@@ -33,19 +33,12 @@ namespace PgManagerApp.Controllers
                 {
                     return RedirectToAction("Login", "Auth");
                 }
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateMaster(MasterUser model)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 if (ModelState.IsValid)
                 {
                     string passHash = HashPassword(model.PasswordHash);
@@ -63,11 +56,6 @@ namespace PgManagerApp.Controllers
                 }
 
                 return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         private string HashPassword(string? password)
