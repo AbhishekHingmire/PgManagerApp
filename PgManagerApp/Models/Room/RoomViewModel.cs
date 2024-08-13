@@ -9,19 +9,21 @@ namespace PgManagerApp.Models.Room
         public int Id { get; set; }
 
         [Required(ErrorMessage ="Enter room number/name")]
-        [Display(Name = "Room Number/Name*")]
+        [Display(Name = "Room Number or Name*")]
+        [StringLength(10)]
         [Range(1, int.MaxValue, ErrorMessage = "The value must be a valid.")]
         public string RoomNumber { get; set; }
 
         [Required(ErrorMessage = "Enter room capacity")]
         [Range(1, int.MaxValue, ErrorMessage = "Capacity must be greater than 0.")]
         [Display(Name = "Capacity*")]
+        [StringLength(2)]
         public string Capacity { get; set; }
 
         [NotMapped]
         public string? RemainingSpace { get; set; }
 
-        [Display(Name = "Hot Water")]
+        [Display(Name = "Hot water")]
         public bool HasHotWater { get; set; } = false;
 
         [Display(Name = "Shower")]
@@ -30,7 +32,7 @@ namespace PgManagerApp.Models.Room
         [Display(Name = "Commode")]
         public bool HasCommode { get; set; } = false;
 
-        [Display(Name = "WiFi")]
+        [Display(Name = "Wifi")]
         public bool HasWiFi { get; set; } = false;
 
         [NotMapped]

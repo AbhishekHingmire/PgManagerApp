@@ -52,6 +52,7 @@ namespace PgManagerApp.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
+        [StringLength(60)]
         public string? Name { get; set; }
 
         [NotMapped]

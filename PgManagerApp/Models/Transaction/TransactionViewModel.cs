@@ -26,11 +26,13 @@ namespace PgManagerApp.Models.Transaction
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid charge amount.")]
         [Display(Name = "Charge Amount*")]
+        [MaxLength(5)]
         public string? ChargeAmount { get; set; }
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid amount paid.")]
         [Display(Name = "Amount Paid*")]
+        [MaxLength(5)]
         public string? AmountPaid { get; set; }
 
         [Required(ErrorMessage="Please enter start date.")]

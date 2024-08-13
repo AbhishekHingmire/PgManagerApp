@@ -75,11 +75,11 @@
                                             <input asp-for="IdentityNumber" id="identityNumber" class="form-control" required>
                                             <span class="text-danger custom-validation"></span>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Identity Proof*</label>
-                                            <input asp-for="ProfilePicture" type="file" class="form-control-file" />
-                                            <span asp-validation-for="ProfilePicture" class="text-danger"></span>
-                                        </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Identity Proof*</label>
+                                                    <input asp-for="ProfilePicture" type="file" class="form-control-file" />
+                                                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                                                </div>
 
                                         <button type="submit" class="btn btn-primary btn-sm">
                                             <i class="fa fa-save"></i> Submit
@@ -199,9 +199,30 @@
         // Initial check when the page loads
         checkFormValidity();
 
+        const fileInput = document.querySelector('input[type="file"]');
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const maxSize = 5 * 1024 * 1024; // 5 MB
+
+            if (file) {
+                // Validate file type
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Please upload a JPG, PNG, or JPEG image.');
+                    fileInput.value = ''; // Clear the file input
+                    return false;
+                }
+
+                // Validate file size
+                if (file.size > maxSize) {
+                    alert('File size must be less than 5 MB.');
+                    fileInput.value = ''; // Clear the file input
+                    return false;
+                }
+            }
+        });
+
     </script>
 
 </body>
-
-
-</html>
