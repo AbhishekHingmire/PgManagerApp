@@ -4,7 +4,6 @@ using PgManagerApp.Models;
 
 namespace PgManagerApp.Controllers
 {
-    [Authorize]
     public class FormController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -27,6 +26,8 @@ namespace PgManagerApp.Controllers
                 return View();
             }
         }
+
+        [Authorize]
         public IActionResult GenerateFormLink()
         {
                 int masterId = HttpContext.Session.GetInt32("MasterUserId") ?? 0;
