@@ -4,6 +4,10 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800 m-1">Profile Management</h1>
+        <form asp-controller="Auth" asp-action="DeleteAccount" method="post">
+        <button type="submit" class="d-sm-inline-block btn btn-sm m-1 btn-danger shadow-sm" onclick="return confirm('This action will result permanently delete your all data. do you still want to delete this account?');"
+           ><i class="fas fa-trash fa-md text-danger-50"></i> Delete Profile</button>
+        </form>
     </div>
     @{
         if (TempData["Message"] != null)

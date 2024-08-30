@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PgManagerApp.Models;
@@ -6,6 +7,7 @@ using PgManagerApp.Models.Transaction;
 
 namespace PgManagerApp.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,8 +17,6 @@ namespace PgManagerApp.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var model = new TransactionViewModel();
                 model.MasterId = HttpContext.Session.GetInt32("MasterUserId");
 
@@ -53,7 +53,6 @@ namespace PgManagerApp.Controllers
                     int occupiedSpace = _context.Transactions
                    .Where(t => t.RoomId == room.Id && t.MasterId == HttpContext.Session.GetInt32("MasterUserId")) // Filter transactions by the specific RoomId
                    .Select(t => t.UserId) // Select the UserId from the transactions
-                   .Distinct() // Ensure unique users (in case of duplicate transactions)
                    .Count(); // Count the number of unique users
 
                     int remainingSpace = Convert.ToInt32(room.Capacity) - occupiedSpace;
@@ -72,19 +71,12 @@ namespace PgManagerApp.Controllers
                 model.Rooms = availableRooms;
 
                 return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddOrEdit(TransactionViewModel model) 
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var tran = new TransactionViewModel();
 
                 if (model.Id == 0)
@@ -119,19 +111,12 @@ namespace PgManagerApp.Controllers
                     }
                 }
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteTransaction(int Id)
         {
-            if (HttpContext.Session.GetInt32("MasterUserId") != null && HttpContext.Session.GetString("Username") != null)
-            {
                 var transaction = new TransactionViewModel();
                 transaction = _context.Transactions.Where(x => x.Id == Id && x.MasterId == HttpContext.Session.GetInt32("MasterUserId")).FirstOrDefault();
                 if (transaction != null)
@@ -141,11 +126,6 @@ namespace PgManagerApp.Controllers
                 }
                 TempData["Message"] = "Transaction succesfully deleted.";
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Login", "Auth");
-            }
         }
     }
 }

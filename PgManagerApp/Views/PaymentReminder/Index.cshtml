@@ -47,10 +47,10 @@
                 <thead class="thead bg-primary text-white" style="position: sticky; top: -1px; z-index: 1;">
                     <tr>
                         <th>User</th>
-                        <th>Mobile</th>
+                       @*  <th>Mobile</th> *@
                         <th>Pending Amount</th>
-                        <th>Action</th>
-                    </tr>
+@*                         <th>Action</th>
+ *@                    </tr>
                 </thead>
             <tbody>
                 @if(Model?.Users?.Count > 0)
@@ -61,24 +61,24 @@
                     {
                     <tr>
                         <td>@user.Name</td>
-                        <td>+91 @user.MobileNumber</td>
-                                <td class="text-danger">₹ @user.PendingAmount</td>
-                        <td>
+                                    <td class="text-danger">₹ @user.PendingAmount</td>
+                        @* <td>+91 @user.MobileNumber</td>
+                        <td> 
                             <form asp-action="" method="post">
                                 <input type="hidden" name="userId" value="@user.Id" />
                                             <button type="submit" onclick="sendReminder('@user.MobileNumber', '@user.PendingAmount')" class="btn bg-light text-primary btn-sm">
                                     <i class="fa fa-envelope"></i> Send Reminder
                                 </button>
                             </form>
-                        </td>
+                        </td> *@
                     </tr>
                     }
                  }
-                    }
+                }
                     else
                     {
                         <tr>
-                            <td colspan="4">
+                            <td colspan="2">
                                 <strong class="text-center">No users found!</strong>
                             </td>
                         </tr>
